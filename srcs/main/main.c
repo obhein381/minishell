@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdio.h>
 
 static char	*read_input(void)
 {
@@ -32,10 +33,15 @@ static char	*read_input(void)
 int	main(void)
 {
 	char	*input;
+	t_token	*token_arr;
 
 	while (1)
 	{
 		input = read_input();
+		token_arr = tokenization(input);
+		print_token_arr(token_arr);
+		if (token_arr == NULL)
+			return (1);
 	}
 	return (0);
 }
