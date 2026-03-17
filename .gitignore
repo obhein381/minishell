@@ -1,0 +1,11 @@
+# executable
+minishell
+
+# object files
+*.o
+
+# libraries
+*.a
+
+# macOS
+.DS_Store
