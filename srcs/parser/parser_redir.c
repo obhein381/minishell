@@ -1,42 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   parser_redir.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jisulim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/18 10:45:30 by jisulim           #+#    #+#             */
-/*   Updated: 2026/03/18 10:45:32 by jisulim          ###   ########.fr       */
+/*   Created: 2026/03/18 16:13:27 by jisulim           #+#    #+#             */
+/*   Updated: 2026/03/18 16:13:29 by jisulim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_command	*parser(t_token	*token_arr)
+t_command	*parser_redir(t_command **commands, t_parser_state state)
 {
-	t_command		*commands;
-	t_parser_state	state;
-
-	commands = NULL;
-	state.prev = NULL;
-	state.cur = token_arr;
-
-	while (state.cur != NULL)
+	if (state.cur->next == NULL)
 	{
-		if (state.cur->type == TOKEN_PIPE)
-		{
-		}
-		else if (state.cur->type == TOKEN_WORD)
-		{
-		}
-		else //tpye == TOKEN_REDIR >, >>, <, << 
-		{
-		}
-		state.prev = state.cur;
-		state.cur = state.cur->next;
+		//parser error
+		return (free_command_arr(*commands));
 	}
-	return (commands);
+	if (state.cur->next->type != TOKEN_WORD)
+	{
+		//parser error
+		return (free_command_arr(*commands));
+	}
+	return (*commands);
 }
-
-
-

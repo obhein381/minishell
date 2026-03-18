@@ -1,42 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   parser_word.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jisulim <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/18 10:45:30 by jisulim           #+#    #+#             */
-/*   Updated: 2026/03/18 10:45:32 by jisulim          ###   ########.fr       */
+/*   Created: 2026/03/18 16:13:47 by jisulim           #+#    #+#             */
+/*   Updated: 2026/03/18 16:13:49 by jisulim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_command	*parser(t_token	*token_arr)
+t_command	*parser_word(t_command **commands, t_token *token_arr)
 {
-	t_command		*commands;
-	t_parser_state	state;
-
-	commands = NULL;
-	state.prev = NULL;
-	state.cur = token_arr;
-
-	while (state.cur != NULL)
-	{
-		if (state.cur->type == TOKEN_PIPE)
-		{
-		}
-		else if (state.cur->type == TOKEN_WORD)
-		{
-		}
-		else //tpye == TOKEN_REDIR >, >>, <, << 
-		{
-		}
-		state.prev = state.cur;
-		state.cur = state.cur->next;
-	}
-	return (commands);
+	(void)commands;
+	(void)token_arr;
+	return (*commands);
 }
-
-
-
