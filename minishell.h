@@ -19,10 +19,18 @@
 
 typedef struct s_token
 {
-    int type;
-    char *value;
-    struct s_token *next;
+    int		type;
+    char	*value;
+    struct	s_token *next;
 }			t_token;
+
+typedef struct s_command
+{
+	char				**commands;
+	int					fd_in;
+	int					fd_out;
+	struct s_command	*next;
+}						t_command;
 
 # define TOKEN_WORD 0
 # define TOKEN_PIPE 1
@@ -31,12 +39,24 @@ typedef struct s_token
 # define TOKEN_REDIR_IN 4
 # define TOKEN_HEREDOC 5
 # define TOKEN_SPACE 6
+# define COMMAND_ECHO 10
+# define COMMAND_CD 11
+# define COMMAND_PWD 12
+# define COMMAND_EXPORT 13
+# define COMMAND_UNSET 14
+# define COMMAND_ENV 15
+# define COMMAND_EXIT 16
+# define COMMAND_MIN_N 20
 
-t_token	*new_token(char *input, int len, int type);
-t_token	*add_back_token(t_token *new_token, t_token **arr_token);
-t_token	*free_token_arr(t_token *head);
-t_token *tokenization(char *input);
-void	print_token_arr(t_token *token_arr);
+
+t_token		*new_token(char *input, int len, int type);
+t_token		*add_back_token(t_token *new_token, t_token **arr_token);
+t_token		*free_token_arr(t_token *head);
+t_token 	*tokenization(char *input);
+void		print_token_arr(t_token *token_arr);
+t_token		*add_back_command(t_command **commands, t_command *new);
+t_command	*new_command(void);
+t_command	*free_command_arr(t_command *head);
 
 #endif
 /*
