@@ -21,7 +21,7 @@ typedef struct s_token
 {
     int		type;
     char	*value;
-    struct	s_token *next;
+	struct	s_token *next;
 }			t_token;
 
 typedef struct s_command
@@ -31,6 +31,12 @@ typedef struct s_command
 	int					fd_out;
 	struct s_command	*next;
 }						t_command;
+
+typedef struct s_parser_state
+{
+	t_token	*prev;
+	t_token	*cur;
+}	t_parser_state;
 
 # define TOKEN_WORD 0
 # define TOKEN_PIPE 1

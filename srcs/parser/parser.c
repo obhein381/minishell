@@ -14,18 +14,32 @@
 
 int	parser_redir(t_command **commands, t_token *token_arr)
 {
+	(void)commands;
+	(void)token_arr;
 	return (0);
 }
 
 int	parser_word(t_command **commands, t_token *token_arr)
 {
+	(void)commands;
+	(void)token_arr;
 	return (0);
 }
 
-t_command	*parser_pipe(t_command **commands)
+t_command	*parser_pipe(t_command **commands, t_parser_state state)
 {
 	t_command	*new;
 
+	if (state.prev == NULL || state.cur->next == NULL)
+	{
+		//error
+		return (NULL);
+	}
+	if (state.cur->next->type != TOKEN_WORD || state.prev->type != TOKEN_WORD)
+	{
+		//error
+		return (NULL);
+	}
 	new = new_command();
 	if (new == NULL)
 	{
@@ -38,23 +52,26 @@ t_command	*parser_pipe(t_command **commands)
 
 t_command	*parser(t_token	*token_arr)
 {
-	t_token		*cur;
-	t_command	*commands;
+	t_command		*commands;
+	t_parser_state	state;
 
-	cur = token_arr;
+	commands = NULL;
+	state.prev = NULL;
+	state.cur = token_arr;
 
-	while (cur != NULL)
+	while (state.cur != NULL)
 	{
-		if (cur->type == TOKEN_PIPE)
+		if (state.cur->type == TOKEN_PIPE)
 		{
 		}
-		else if (cur->type == TOKEN_WORD)
+		else if (state.cur->type == TOKEN_WORD)
 		{
 		}
 		else //tpye == TOKEN_REDIR >, >>, <, << 
 		{
 		}
-
+		state.prev = state.cur;
+		state.cur = state.cur->next;
 	}
 	return (commands);
 }
