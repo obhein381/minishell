@@ -39,9 +39,17 @@ int	get_redir_fd(t_token *file_token)
 void apply_redirection(t_command **commands, t_parser_state state, int fd)
 {
 	if(state.cur->type == TOKEN_REDIR_IN)
+	{
+		/*if ((*commands)->fd_in != -1)
+			close((*commands)->fd_in);*/
 		(*commands)->fd_in = fd;
+	}
 	else //TOKEN_REDIR_OUT)
+	{
+		/*if ((*commands)->fd_out != -1)
+			close((*commands)->fd_out);*/
 		(*commands)->fd_out = fd;
+	}
 	//TOKEN_APPEND
 	// TOKEN_HEREDOC
 	return ;

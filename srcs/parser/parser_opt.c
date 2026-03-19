@@ -43,8 +43,8 @@ t_command	*new_command(void)
 	new = malloc(sizeof(t_command));
 	if (new == NULL)
 		return (NULL);
-	new->fd_in = 0;
-	new->fd_out = 1;
+	new->fd_in = -1;
+	new->fd_out = -1;
 	new->next = NULL;
 	new->commands = NULL;
 	return (new);
