@@ -39,11 +39,24 @@ int	main(void)
 	{
 		input = read_input();
 		token_arr = tokenization(input);
+		if (token_arr == NULL)
+		{
+			free(input);
+			write(2, "malloc error\n", 13);
+			return(1);
+		}
 		print_token_arr(token_arr);
 		commands = parser(token_arr);
+		if (commands == NULL)
+		{
+			free_token_arr(token_arr);
+			free(input);
+			continue ;
+		}
 		print_commands(commands);
-		if (token_arr == NULL)
-			return (1);
+		free_command_arr(commands);
+		free_token_arr(token_arr);
+		free(input);
 	}
 	return (0);
 }

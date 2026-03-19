@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-t_command	*parser_pipe(t_command **commands, t_command **cur)
+t_command	*parser_pipe(t_command **commands, t_command **cur, t_token	*token_arr)
 {
 	t_command	*new;
 
@@ -20,7 +20,9 @@ t_command	*parser_pipe(t_command **commands, t_command **cur)
 	if (new == NULL)
 	{
 		//malloc error
-		return (free_command_arr(*commands));
+		free_command_arr(*commands);
+		free_token_arr(token_arr);
+		exit(1);
 	}
 	*commands = add_back_command(commands, new);
 	(*cur) = new;
