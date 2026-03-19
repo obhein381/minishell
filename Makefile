@@ -3,9 +3,12 @@ CFLAGS  = -Wall -Wextra -Werror -I. -Isrcs/libft
 
 NAME = minishell
 
-SRCS = srcs/main/main.c srcs/lexer/tokenization.c srcs/lexer/tokenization_opt.c \
-srcs/debug/debug_token.c srcs/parser/parser_redir.c srcs/parser/parser_pipe.c \
-srcs/parser/parser_word.c srcs/parser/parser_opt.c
+SRCS = srcs/debug/debug_token.c srcs/debug/debug_commands.c \
+		srcs/main/main.c \
+		srcs/lexer/tokenization.c srcs/lexer/tokenization_opt.c \
+		srcs/parser/parser_redir.c srcs/parser/parser_pipe.c \
+		srcs/parser/parser_word.c srcs/parser/parser_opt.c \
+		srcs/parser/parser.c
 
 OBJS = $(SRCS:.c=.o)
 

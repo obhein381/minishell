@@ -20,21 +20,21 @@ t_command	*parser(t_token	*token_arr)
 	commands = NULL;
 	state.prev = NULL;
 	state.cur = token_arr;
-
+	commands = parser_pipe(&commands);
 	while (state.cur != NULL)
 	{
 		if (state.cur->type == TOKEN_PIPE)
-		{
-		}
+			commands = parser_pipe(&commands);
 		else if (state.cur->type == TOKEN_WORD)
-		{
-		}
-		else //tpye == TOKEN_REDIR >, >>, <, << 
-		{
-		}
+			commands = parser_word(&commands, state);
+		else
+			commands = parser_redir(&commands, &state);
+		if (commands == NULL)
+			return (free_token_arr(token_arr), NULL);
 		state.prev = state.cur;
 		state.cur = state.cur->next;
 	}
+	//validate_pipe_syntax
 	return (commands);
 }
 
