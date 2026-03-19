@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-t_command	*parser_pipe(t_command **commands)
+t_command	*parser_pipe(t_command **commands, t_command **cur)
 {
 	t_command	*new;
 
@@ -23,5 +23,6 @@ t_command	*parser_pipe(t_command **commands)
 		return (free_command_arr(*commands));
 	}
 	*commands = add_back_command(commands, new);
+	(*cur) = new;
 	return (*commands);
 }

@@ -22,8 +22,8 @@ void	print_commands(t_command *commands)
 	head = commands;
 	while (head != NULL)
 	{
-		printf("n command fd_in == %d \n", head->fd_in);
-		printf("n command fd_out == %d \n", head->fd_out);
+		printf("%d command fd_in == %d \n",n , head->fd_in);
+		printf("%d command fd_out == %d \n",n , head->fd_out);
 		n++;
 		head = head->next;
 	}

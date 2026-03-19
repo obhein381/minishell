@@ -15,20 +15,23 @@
 t_command	*parser(t_token	*token_arr)
 {
 	t_command		*commands;
+	t_command		*cur;
 	t_parser_state	state;
 
 	commands = NULL;
 	state.prev = NULL;
+	cur = NULL;
 	state.cur = token_arr;
-	commands = parser_pipe(&commands);
+	commands = parser_pipe(&commands, &cur);
+	cur = commands;
 	while (state.cur != NULL)
 	{
 		if (state.cur->type == TOKEN_PIPE)
-			commands = parser_pipe(&commands);
+			cur = parser_pipe(&commands, &cur);
 		else if (state.cur->type == TOKEN_WORD)
-			commands = parser_word(&commands, state);
+			cur = parser_word(&cur, state);
 		else
-			commands = parser_redir(&commands, &state);
+			cur = parser_redir(&cur, &state);
 		if (commands == NULL)
 			return (free_token_arr(token_arr), NULL);
 		state.prev = state.cur;
