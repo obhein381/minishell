@@ -66,7 +66,7 @@ t_command	*add_back_command(t_command **commands, t_command *new);
 t_command	*new_command(void);
 t_command	*free_command_arr(t_command *head);
 t_command	*parser_redir(t_command **commands, t_parser_state *state);
-t_command	*parser_pipe(t_command **commands, t_command **cur, t_token	*token_arr);
+t_command	*parser_pipe(t_command **commands, t_command **cur);
 t_command	*parser_word(t_command **commands, t_parser_state state);
 t_command	*parser(t_token	*token_arr);
 
