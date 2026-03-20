@@ -16,6 +16,7 @@
 # include <termios.h>
 # include <sys/ioctl.h>
 # include <termcap.h>
+# include "srcs/libft/libft.h"
 
 typedef struct s_token
 {

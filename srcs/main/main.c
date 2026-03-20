@@ -49,7 +49,7 @@ int	main(void)
 		commands = parser(token_arr);
 		if (commands == NULL)
 		{
-			free_token_arr(token_arr);
+			free(token_arr);
 			free(input);
 			continue ;
 		}

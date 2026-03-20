@@ -33,7 +33,7 @@ t_command	*parser(t_token	*token_arr)
 		else
 			cur = parser_redir(&cur, &state);
 		if (cur == NULL)
-			return (free_token_arr(token_arr), NULL);
+			return (NULL);
 		state.prev = state.cur;
 		state.cur = state.cur->next;
 	}
