@@ -17,6 +17,7 @@ void	print_commands(t_command *commands)
 {
 	t_command	*head;
 	int			n;
+	int			i;
 
 	n = 0;
 	head = commands;
@@ -24,6 +25,14 @@ void	print_commands(t_command *commands)
 	{
 		printf("%d command fd_in == %d \n",n , head->fd_in);
 		printf("%d command fd_out == %d \n",n , head->fd_out);
+		printf("%d command argv ==================================== \n", n);
+		i = 0;
+		while (head->argv[i] != NULL)
+		{
+			printf("   %d argv == %s \n", i, head->argv[i]);
+			i++;
+		}
+		printf("=================================================== \n");
 		n++;
 		head = head->next;
 	}

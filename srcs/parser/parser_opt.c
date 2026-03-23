@@ -20,15 +20,15 @@ t_command	*free_command_arr(t_command *head)
 	while(head != NULL)
 	{
 		next = head->next;
-		if (head->commands != NULL)
+		if (head->argv != NULL)
 		{
 			i = 0;
-			while (head->commands[i] != NULL)
+			while (head->argv[i] != NULL)
 			{
-				free(head->commands[i]);
+				free(head->argv[i]);
 				i++;
 			}
-			free(head->commands);
+			free(head->argv);
 		}
 		free(head);
 		head = next;
@@ -36,17 +36,37 @@ t_command	*free_command_arr(t_command *head)
 	return (NULL);
 }
 
-t_command	*new_command(void)
+void	set_argv(t_command *new, int token_count)
+{
+	int	i;
+
+	i = 0;
+	while (i <= token_count)
+	{
+		new->argv[i] = NULL;
+		i++;
+	}
+	return ;
+}
+
+t_command	*new_command(int token_count)
 {
 	t_command	*new;
 
 	new = malloc(sizeof(t_command));
 	if (new == NULL)
 		return (NULL);
+	new->argv = malloc(sizeof(char *) * (token_count + 1));
+	if (new->argv == NULL)
+	{
+		free (new);
+		return (NULL);
+	}
+	set_argv(new, token_count);
 	new->fd_in = -1;
 	new->fd_out = -1;
+	new->count = 0;
 	new->next = NULL;
-	new->commands = NULL;
 	return (new);
 }
 

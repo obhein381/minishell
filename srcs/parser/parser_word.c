@@ -14,7 +14,11 @@
 
 t_command	*parser_word(t_command **commands, t_parser_state state)
 {
-	(void)commands;
-	(void)state;
+
+	(*commands)->argv[(*commands)->count] = ft_strdup(state.cur->value);
+	if ((*commands)->argv[(*commands)->count] == NULL)
+		return (NULL);
+	(*commands)->count++;
+	(*commands)->argv[(*commands)->count] = NULL;
 	return (*commands);
 }

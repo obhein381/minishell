@@ -45,7 +45,6 @@ int	main(void)
 			write(2, "malloc error\n", 13);
 			return(1);
 		}
-		print_token_arr(token_arr);
 		commands = parser(token_arr);
 		if (commands == NULL)
 		{
@@ -53,7 +52,6 @@ int	main(void)
 			free(input);
 			continue ;
 		}
-		print_commands(commands);
 		free_command_arr(commands);
 		free_token_arr(token_arr);
 		free(input);

@@ -27,7 +27,8 @@ typedef struct s_token
 
 typedef struct s_command
 {
-	char				**commands;
+	char				**argv;
+	int					count;
 	int					fd_in;
 	int					fd_out;
 	struct s_command	*next;
@@ -37,6 +38,7 @@ typedef struct s_parser_state
 {
 	t_token	*prev;
 	t_token	*cur;
+	int		token_count;
 }	t_parser_state;
 
 # define TOKEN_WORD 0
@@ -63,10 +65,10 @@ t_token		*add_back_token(t_token *new_token, t_token **arr_token);
 t_token		*free_token_arr(t_token *head);
 t_token 	*tokenization(char *input);
 t_command	*add_back_command(t_command **commands, t_command *new);
-t_command	*new_command(void);
+t_command	*new_command(int token_count);
 t_command	*free_command_arr(t_command *head);
 t_command	*parser_redir(t_command **commands, t_parser_state *state);
-t_command	*parser_pipe(t_command **commands, t_command **cur);
+t_command	*parser_pipe(t_command **commands, t_command **cur, int token_count);
 t_command	*parser_word(t_command **commands, t_parser_state state);
 t_command	*parser(t_token	*token_arr);
 

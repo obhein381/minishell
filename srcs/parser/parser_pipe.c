@@ -12,11 +12,11 @@
 
 #include "minishell.h"
 
-t_command	*parser_pipe(t_command **commands, t_command **cur)
+t_command	*parser_pipe(t_command **commands, t_command **cur, int token_count)
 {
 	t_command	*new;
 
-	new = new_command();
+	new = new_command(token_count);
 	if (new == NULL)
 	{
 		write(2, "malloc error\n", 13);
