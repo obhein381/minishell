@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 CC      = cc
-CFLAGS  = -Wall -Wextra -Werror -I. -Isrcs/libft
+CFLAGS  = -Wall -Wextra -Werror -I.
 AR      = ar
 ARFLAGS = rcs
 

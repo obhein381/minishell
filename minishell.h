@@ -71,6 +71,7 @@ t_command	*parser_redir(t_command **commands, t_parser_state *state);
 t_command	*parser_pipe(t_command **commands, t_command **cur, int token_count);
 t_command	*parser_word(t_command **commands, t_parser_state state);
 t_command	*parser(t_token	*token_arr);
+int			check_pipe_syntax(t_command *commands);
 
 #endif
 /*

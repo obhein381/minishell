@@ -12,6 +12,16 @@
 
 #include "minishell.h"
 
+static void	free_all(char *input, t_token *token_arr, t_command *commands)
+{
+	if (input != NULL)
+		free(input);
+	if (token_arr != NULL)
+		free_token_arr(token_arr);
+	if (commands != NULL)
+		free_command_arr(commands);
+}
+
 static char	*read_input(void)
 {
 	char	*input;
@@ -41,20 +51,17 @@ int	main(void)
 		token_arr = tokenization(input);
 		if (token_arr == NULL)
 		{
-			free(input);
+			free_all(input, token_arr, commands);
 			write(2, "malloc error\n", 13);
 			return(1);
 		}
 		commands = parser(token_arr);
-		if (commands == NULL)
+		if (commands == NULL || check_pipe_syntax(commands) == 1)
 		{
-			free(token_arr);
-			free(input);
+			free_all(input, token_arr, commands);
 			continue ;
 		}
-		free_command_arr(commands);
-		free_token_arr(token_arr);
-		free(input);
+		free_all(input, token_arr, commands);
 	}
 	return (0);
 }
