@@ -13,12 +13,6 @@
 #include "minishell.h"
 #include <stdio.h>
 
-t_command	*print_error(void)
-{
-	write(2, "parser error redirection\n", 25);
-	return (NULL);
-}
-
 int	fd_heredoc(t_token *file_token)
 {
 	char	*eof;
@@ -80,18 +74,18 @@ void apply_redirection(t_command **commands, int type, int fd)
 	return ;
 }
 
-t_command	*parser_redir(t_command **commands, t_parser_state *state)
+int	parser_redir(t_command **commands, t_parser_state *state)
 {
 	int	fd;
 	t_token	*file_token;
 
 	file_token = state->cur->next;
 	if (file_token == NULL || file_token->type != TOKEN_WORD)
-		return (print_error());
+		return (REDIR_ERROR);
 	fd = get_redir_fd(file_token, state->cur->type);
 	if (fd < 0)
-		return (NULL);
+		return (FD_ERROR);
 	apply_redirection(commands, state->cur->type, fd);
 	state->cur = file_token;
-	return (*commands);
+	return (0);
 }

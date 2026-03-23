@@ -47,6 +47,7 @@ int	main(void)
 
 	while (1)
 	{
+		commands = NULL;
 		input = read_input();
 		token_arr = tokenization(input);
 		if (token_arr == NULL)
@@ -56,7 +57,7 @@ int	main(void)
 			return(1);
 		}
 		commands = parser(token_arr);
-		if (commands == NULL || check_pipe_syntax(commands) == 1)
+		if (commands == NULL)
 		{
 			free_all(input, token_arr, commands);
 			continue ;

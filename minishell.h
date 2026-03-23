@@ -56,6 +56,10 @@ typedef struct s_parser_state
 # define COMMAND_ENV 15
 # define COMMAND_EXIT 16
 # define COMMAND_MIN_N 20
+# define MALLOC_ERROR 1
+# define PIPE_ERROR 2
+# define REDIR_ERROR 3
+# define FD_ERROR 4
 
 void		print_commands(t_command *commands);
 void		print_token_arr(t_token *token_arr);
@@ -67,9 +71,9 @@ t_token 	*tokenization(char *input);
 t_command	*add_back_command(t_command **commands, t_command *new);
 t_command	*new_command(int token_count);
 t_command	*free_command_arr(t_command *head);
-t_command	*parser_redir(t_command **commands, t_parser_state *state);
-t_command	*parser_pipe(t_command **commands, t_command **cur, int token_count);
-t_command	*parser_word(t_command **commands, t_parser_state state);
+int			parser_redir(t_command **commands, t_parser_state *state);
+int			parser_pipe(t_command **commands, t_command **cur, int token_count);
+int			parser_word(t_command **commands, t_parser_state state);
 t_command	*parser(t_token	*token_arr);
 int			check_pipe_syntax(t_command *commands);
 

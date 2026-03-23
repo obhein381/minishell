@@ -12,13 +12,13 @@
 
 #include "minishell.h"
 
-t_command	*parser_word(t_command **commands, t_parser_state state)
+int	parser_word(t_command **commands, t_parser_state state)
 {
 
 	(*commands)->argv[(*commands)->count] = ft_strdup(state.cur->value);
 	if ((*commands)->argv[(*commands)->count] == NULL)
-		return (NULL);
+		return (MALLOC_ERROR);
 	(*commands)->count++;
 	(*commands)->argv[(*commands)->count] = NULL;
-	return (*commands);
+	return (0);
 }

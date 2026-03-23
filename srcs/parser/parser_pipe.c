@@ -64,17 +64,14 @@ t_command	*add_back_command(t_command **commands, t_command *new)
 	return (*commands);
 }
 
-t_command	*parser_pipe(t_command **commands, t_command **cur, int token_count)
+int	parser_pipe(t_command **commands, t_command **cur, int token_count)
 {
 	t_command	*new;
 
 	new = new_command(token_count);
 	if (new == NULL)
-	{
-		write(2, "malloc error\n", 13);
-		return (NULL);
-	}
+		return (MALLOC_ERROR);
 	*commands = add_back_command(commands, new);
 	(*cur) = new;
-	return (new);
+	return (0);
 }
