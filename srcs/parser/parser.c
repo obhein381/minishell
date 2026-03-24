@@ -69,6 +69,6 @@ int parser(t_token	*token_arr, t_command **commands)
 		state.cur = state.cur->next;
 	}
 	if (check_pipe_syntax(*commands) == PIPE_ERROR)
-		return (check_error);
+		return (PIPE_ERROR);
 	return (0);
 }

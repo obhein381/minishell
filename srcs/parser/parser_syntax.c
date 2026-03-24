@@ -16,10 +16,9 @@ int			check_pipe_syntax(t_command *head)
 {
 	while (head != NULL)
 	{
-		if (head->argv[0] == NULL)
+		if (head->argv[0] == NULL && head->fd_in == -1 && head->fd_out == -1)
 		{
-			write(2, "pipe error\n", 12);
-			return (1);
+			return (PIPE_ERROR);
 		}
 		head = head->next;
 	}
