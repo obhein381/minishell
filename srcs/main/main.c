@@ -55,13 +55,15 @@ static void	handle_error(int status, char *input, t_token *token_arr, t_command 
 }
 
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
 	int			status;
 	t_token		*token_arr;
 	t_command	*commands;
 
+	(void)argv;
+	(void)argc;
 	while (1)
 	{
 		commands = NULL;
@@ -79,7 +81,8 @@ int	main(void)
 			handle_error(status, input, token_arr, commands);
 			continue;
 		}
-	
+		executor(commands, envp);
+
 		free_all(input, token_arr, commands);
 	}
 	return (0);

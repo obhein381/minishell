@@ -61,6 +61,7 @@ typedef struct s_parser_state
 # define REDIR_ERROR 3
 # define FD_ERROR 4
 # define TOKEN_EMPTY 5
+# define NO_COMMAND 6
 
 void		print_commands(t_command *commands);
 void		print_token_arr(t_token *token_arr);
@@ -77,6 +78,7 @@ int			parser_pipe(t_command **commands, t_command **cur, int token_count);
 int			parser_word(t_command **commands, t_parser_state state);
 int 		parser(t_token	*token_arr, t_command **commands);
 int			check_pipe_syntax(t_command *commands);
+int			executor(t_command *commands, char **envp);
 
 #endif
 /*
