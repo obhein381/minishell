@@ -39,9 +39,26 @@ static char	*read_input(void)
 	return (input);
 }
 
+static void	handle_error(int status, char *input, t_token *token_arr, t_command *commands)
+{
+	if (status == MALLOC_ERROR)
+	{
+		free_all(input, token_arr, commands);
+		write(2, "malloc error\n", 13);
+		exit(1);
+	}
+	else if (status == PIPE_ERROR)
+		write(2, "pipe error\n", 11);
+	else if (status == REDIR_ERROR)
+		write(2, "redir error\n", 12);
+	free_all(input, token_arr, commands);
+}
+
+
 int	main(void)
 {
 	char		*input;
+	int			status;
 	t_token		*token_arr;
 	t_command	*commands;
 
@@ -51,17 +68,14 @@ int	main(void)
 		input = read_input();
 		token_arr = tokenization(input);
 		if (token_arr == NULL)
+			handle_error(MALLOC_ERROR, input, token_arr, commands);
+		status = parser(token_arr, &commands);
+		if (status != 0)
 		{
-			free_all(input, token_arr, commands);
-			write(2, "malloc error\n", 13);
-			return(1);
+			handle_error(status, input, token_arr, commands);
+			continue;
 		}
-		commands = parser(token_arr);
-		if (commands == NULL)
-		{
-			free_all(input, token_arr, commands);
-			continue ;
-		}
+	
 		free_all(input, token_arr, commands);
 	}
 	return (0);

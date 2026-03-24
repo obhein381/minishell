@@ -34,18 +34,6 @@ static void	set_parser_env(t_command **commands, t_command **cur, t_parser_state
 	state->token_count = count_token(token_arr);
 }
 
-static t_command	*handling_error(int check_error, t_command *commands)
-{
-	if (check_error == MALLOC_ERROR)
-		write(2, "malloc error\n", 13);
-	else if (check_error == PIPE_ERROR)
-		write(2, "pipe error\n", 11);
-	else if (check_error == REDIR_ERROR)
-		write(2, "redir error\n", 12);
-	free_command_arr(commands);
-	return (NULL);
-}
-
 static int	parse_token(t_command **commands, t_command **cur, t_parser_state *state)
 {
 	int	check_error;
@@ -60,28 +48,27 @@ static int	parse_token(t_command **commands, t_command **cur, t_parser_state *st
 	return (check_error);
 }
 
-t_command	*parser(t_token	*token_arr)
+int parser(t_token	*token_arr, t_command **commands)
 {
-	t_command		*commands;
 	t_command		*cur;
 	t_parser_state	state;
 	int				check_error;
 
 	if (token_arr == NULL)
-		return (NULL);
-	set_parser_env(&commands, &cur, &state, token_arr);
-	check_error = parser_pipe(&commands, &cur, state.token_count);
+		return (TOKEN_EMPTY);
+	set_parser_env(commands, &cur, &state, token_arr);
+	check_error = parser_pipe(commands, &cur, state.token_count);
 	if (check_error != 0)
-		return (handling_error(check_error, commands));
+		return (check_error);
 	while (state.cur != NULL)
 	{
-		check_error = parse_token(&commands, &cur, &state);
+		check_error = parse_token(commands, &cur, &state);
 		if (check_error != 0)
-			return (handling_error(check_error, commands));
+			return (check_error);
 		state.prev = state.cur;
 		state.cur = state.cur->next;
 	}
-	if (check_pipe_syntax(commands) == PIPE_ERROR)
-		return (handling_error(PIPE_ERROR, commands));
-	return (commands);
+	if (check_pipe_syntax(*commands) == PIPE_ERROR)
+		return (check_error);
+	return (0);
 }
