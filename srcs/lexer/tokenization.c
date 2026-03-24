@@ -65,13 +65,11 @@ static t_token	*add_token_op(t_token **token_arr, char *input, int *i, int type)
 	return(*token_arr);
 }
 
-t_token *tokenization(char *input)
+int	tokenization(char *input, t_token **token_arr)
 {
 	int		i;
-	t_token	*token_arr;
 	int		token_type;
 
-	token_arr = NULL;
 	i = 0;
 	while (input[i] != '\0')
 	{
@@ -80,18 +78,20 @@ t_token *tokenization(char *input)
 			i++;
 		else if (token_type == TOKEN_WORD)
 		{
-			token_arr = add_token_word(&token_arr, &input[i], &i, token_type);
-			if (token_arr == NULL)
-				return (NULL);
+			add_token_word(token_arr, &input[i], &i, token_type);
+			if (*token_arr == NULL)
+				return (MALLOC_ERROR);
 		}
 		else
 		{
-			token_arr = add_token_op(&token_arr, &input[i], &i, token_type);
-			if (token_arr == NULL)
-				return (NULL);
+			add_token_op(token_arr, &input[i], &i, token_type);
+			if (*token_arr == NULL)
+				return (MALLOC_ERROR);
 		}
 	}
-	return (token_arr);
+	if (*token_arr == NULL)
+		return (TOKEN_EMPTY);
+	return (0);
 }
 
 

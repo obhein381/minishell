@@ -65,10 +65,14 @@ int	main(void)
 	while (1)
 	{
 		commands = NULL;
+		token_arr = NULL;
 		input = read_input();
-		token_arr = tokenization(input);
-		if (token_arr == NULL)
-			handle_error(MALLOC_ERROR, input, token_arr, commands);
+		status = tokenization(input, &token_arr);
+		if (status != 0)
+		{
+			handle_error(status, input, token_arr, commands);
+			continue ;
+		}
 		status = parser(token_arr, &commands);
 		if (status != 0)
 		{

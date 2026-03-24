@@ -68,7 +68,7 @@ void		print_token_arr(t_token *token_arr);
 t_token		*new_token(char *input, int len, int type);
 t_token		*add_back_token(t_token *new_token, t_token **arr_token);
 t_token		*free_token_arr(t_token *head);
-t_token 	*tokenization(char *input);
+int			tokenization(char *input, t_token **token_arr);
 t_command	*add_back_command(t_command **commands, t_command *new);
 t_command	*new_command(int token_count);
 t_command	*free_command_arr(t_command *head);
