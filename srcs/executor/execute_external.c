@@ -14,6 +14,7 @@
 
 int	execute_external(t_command *commands, char **envp)
 {
+
 	// find command path
 	// fork
 	// child -> execve

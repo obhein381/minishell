@@ -41,6 +41,7 @@ typedef struct s_parser_state
 	int		token_count;
 }	t_parser_state;
 
+/* token types */
 # define TOKEN_WORD 0
 # define TOKEN_PIPE 1
 # define TOKEN_REDIR_OUT 2
@@ -48,6 +49,8 @@ typedef struct s_parser_state
 # define TOKEN_REDIR_IN 4
 # define TOKEN_HEREDOC 5
 # define TOKEN_SPACE 6
+
+/* builtin command types */
 # define UNKNOWN_COMMAND 0
 # define COMMAND_ECHO 10
 # define COMMAND_CD 11
@@ -57,12 +60,20 @@ typedef struct s_parser_state
 # define COMMAND_ENV 15
 # define COMMAND_EXIT 16
 # define COMMAND_MIN_N 20
+
+/* parser / runtime errors */
 # define MALLOC_ERROR 1
 # define PIPE_ERROR 2
 # define REDIR_ERROR 3
 # define FD_ERROR 4
 # define TOKEN_EMPTY 5
 # define NO_COMMAND 6
+
+/* command path resolution status */
+# define CMD_SUCCESS 0
+# define CMD_NOT_FOUND 1
+# define CMD_PERMISSION 2
+# define CMD_MALLOC_ERROR 3
 
 void		print_commands(t_command *commands);
 void		print_token_arr(t_token *token_arr);
@@ -82,6 +93,7 @@ int			check_pipe_syntax(t_command *commands);
 int			executor(t_command *commands, char **envp);
 int			execute_external(t_command *commands, char **envp);
 int			execute_builtin(t_command *commands, int type);
+int			find_command_path(char *command, char **envp, char **path);
 
 #endif
 /*

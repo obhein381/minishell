@@ -11,6 +11,7 @@ SRCS = srcs/debug/debug_token.c srcs/debug/debug_commands.c \
 		srcs/parser/parser_syntax.c \
 		srcs/parser/parser.c \
 		srcs/executor/execute_external.c srcs/executor/execute_builtin.c \
+		srcs/executor/find_command_path.c \
 		srcs/executor/executor.c
 
 OBJS = $(SRCS:.c=.o)
