@@ -12,26 +12,24 @@
 
 #include "minishell.h"
 
-int	handle_slash_command(char *command, char **path)
-{
-	if (access(command, X_OK) == 0)
-	{
-		*path = ft_strdup(command);
-		if (*path == NULL)
-			return (CMD_MALLOC_ERROR);
-		return (CMD_SUCCESS);
-	}
-	if (errno == EACCES)
-		return (CMD_PERMISSION);
-	return (CMD_NOT_FOUND);
-}
-
 int	find_command_path(char *command, char **envp, char **path)
 {
-	(void)envp;
+	int		path_index;
+	char	**dirs;
+	int		i;
+	int		status;
+
 	*path = NULL;
 	if (ft_strchr(command, '/'))
 		return (handle_slash_command(command, path));
-	//get non slash commnad path
-	return (CMD_NOT_FOUND);
+	path_index = get_path_index(envp);
+	if (path_index == -1)
+		return (CMD_NOT_FOUND);
+	dirs = make_dirs(command, &envp[path_index][5]);
+	if (dirs == NULL)
+		return (CMD_MALLOC_ERROR);
+	status = find_cmd_input_path(dirs, path);
+	i = 0;
+	free_dirs(dirs);
+	return (status);
 }

@@ -71,9 +71,9 @@ typedef struct s_parser_state
 
 /* command path resolution status */
 # define CMD_SUCCESS 0
-# define CMD_NOT_FOUND 1
-# define CMD_PERMISSION 2
-# define CMD_MALLOC_ERROR 3
+# define CMD_NOT_FOUND 7
+# define CMD_PERMISSION 8
+# define CMD_MALLOC_ERROR 9
 
 void		print_commands(t_command *commands);
 void		print_token_arr(t_token *token_arr);
@@ -93,6 +93,11 @@ int			check_pipe_syntax(t_command *commands);
 int			executor(t_command *commands, char **envp);
 int			execute_external(t_command *commands, char **envp);
 int			execute_builtin(t_command *commands, int type);
+int			handle_slash_command(char *command, char **path);
+int			get_path_index(char **envp);
+char		**make_dirs(char *command, char *path);
+void		free_dirs(char **dirs);
+int			find_cmd_input_path(char **dirs, char **path);
 int			find_command_path(char *command, char **envp, char **path);
 
 #endif

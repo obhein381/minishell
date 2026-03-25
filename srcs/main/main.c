@@ -54,7 +54,6 @@ static void	handle_error(int status, char *input, t_token *token_arr, t_command 
 	free_all(input, token_arr, commands);
 }
 
-
 int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
@@ -82,7 +81,6 @@ int	main(int argc, char **argv, char **envp)
 			continue;
 		}
 		executor(commands, envp);
-
 		free_all(input, token_arr, commands);
 	}
 	return (0);

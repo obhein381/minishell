@@ -41,14 +41,17 @@ int	get_builtin_type(t_command *commands)
 int	executor(t_command *commands, char **envp)
 {
 	int	builtin_type;
+	int	status;
 
 	if (commands == NULL)
 		return (1);
 	builtin_type = get_builtin_type(commands);
 	if (builtin_type == UNKNOWN_COMMAND)
-		execute_external(commands, envp);
+		status = execute_external(commands, envp);
 	else
-		execute_builtin(commands, builtin_type);
+		status = execute_builtin(commands, builtin_type);
+	if (status != CMD_SUCCESS)
+		return (status);
 	return (0);
 }
 
