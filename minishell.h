@@ -48,6 +48,7 @@ typedef struct s_parser_state
 # define TOKEN_REDIR_IN 4
 # define TOKEN_HEREDOC 5
 # define TOKEN_SPACE 6
+# define UNKNOWN_COMMAND 0
 # define COMMAND_ECHO 10
 # define COMMAND_CD 11
 # define COMMAND_PWD 12
@@ -79,6 +80,8 @@ int			parser_word(t_command **commands, t_parser_state state);
 int 		parser(t_token	*token_arr, t_command **commands);
 int			check_pipe_syntax(t_command *commands);
 int			executor(t_command *commands, char **envp);
+int			execute_external(t_command *commands, char **envp);
+int			execute_builtin(t_command *commands, int type);
 
 #endif
 /*
