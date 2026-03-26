@@ -62,7 +62,7 @@ typedef struct s_parser_state
 # define COMMAND_MIN_N 20
 
 /* parser / runtime errors */
-# define MALLOC_ERROR 1
+# define MALLOC_ERROR 9
 # define PIPE_ERROR 2
 # define REDIR_ERROR 3
 # define FD_ERROR 4
@@ -71,8 +71,9 @@ typedef struct s_parser_state
 
 /* command path resolution status */
 # define CMD_SUCCESS 0
-# define CMD_NOT_FOUND 7
-# define CMD_PERMISSION 8
+# define CMD_PERROR 1
+# define CMD_NOT_FOUND 127
+# define CMD_PERMISSION 126
 # define CMD_MALLOC_ERROR 9
 
 void		print_commands(t_command *commands);
