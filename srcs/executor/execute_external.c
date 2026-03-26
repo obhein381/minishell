@@ -17,7 +17,7 @@ static int	get_error_code(int err)
 {
 	if (err == ENOENT)
 		return (127);
-	else if(err == EACCES)
+	else if (err == EACCES)
 		return (126);
 	else
 		return (1);
@@ -34,7 +34,7 @@ static int	handling_error(char *command, char *path)
 int	execute_external(t_command *commands, char **envp)
 {
 	char	*path;
-	pid_t 	pid;
+	pid_t	pid;
 	int		status;
 
 	status = find_command_path(commands->argv[0], envp, &path);
@@ -51,10 +51,11 @@ int	execute_external(t_command *commands, char **envp)
 			exit(get_error_code(errno));
 		}
 	}
-	else
-		if (waitpid(pid, &status, 0) < 0)
-			return (handling_error("waitpid", path));
+	if (waitpid(pid, &status, 0) < 0)
+		return (handling_error("waitpid", path));
 	free(path);
-	return (0);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	return (128 + WTERMSIG(status));
 }
 
