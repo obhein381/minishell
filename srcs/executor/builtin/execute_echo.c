@@ -15,11 +15,22 @@
 
 int	check_option_n(char *argv)
 {
+	int i;
+
 	if (argv == NULL)
 		return (0);
-	if (ft_strncmp(argv, "-n", 2) == 0 && ft_strlen(argv) == 2)
-		return (1);
-	return (0);
+	if (argv[0] != '-')
+		return (0);
+	if (argv[1] == '\0')
+		return (0);
+	i = 1;
+	while (argv[i] != '\0')
+	{
+		if (argv[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 void	print_argv(char **argv, int i)
