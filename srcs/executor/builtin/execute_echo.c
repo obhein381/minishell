@@ -27,6 +27,8 @@ void	print_argv(char **argv, int i)
 	while (argv[i] != NULL)
 	{
 		write(1, argv[i], ft_strlen(argv[i]));
+		if (argv[i + 1] != NULL)
+			write(1, " ", 1);
 		i++;
 	}
 	return ;
