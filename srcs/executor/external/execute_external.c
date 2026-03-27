@@ -16,9 +16,9 @@
 static int	get_error_code(int err)
 {
 	if (err == ENOENT)
-		return (127);
+		return (CMD_NOT_FOUND);
 	else if (err == EACCES)
-		return (126);
+		return (CMD_PERMISSION);
 	else
 		return (1);
 }
@@ -29,6 +29,20 @@ static int	handling_error(char *command, char *path)
 	if (path != NULL)
 		free(path);
 	return (1);
+}
+
+static int	print_signal_error(int status)
+{
+	int	sig;
+
+	if (!WIFSIGNALED(status))
+		return (1);
+	sig = WTERMSIG(status);
+	if (sig == SIGQUIT)
+		write(2, "Quit (core dumped)\n", 19);
+	else if (sig == SIGINT)
+		write(2, "\n", 1);
+	return (128 + WTERMSIG(status));
 }
 
 int	execute_external(t_command *commands, char **envp)
@@ -56,6 +70,6 @@ int	execute_external(t_command *commands, char **envp)
 	free(path);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
-	return (128 + WTERMSIG(status));
+	return (print_signal_error(status));
 }
 

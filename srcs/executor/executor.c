@@ -50,8 +50,8 @@ int	executor(t_command *commands, char **envp)
 		status = execute_external(commands, envp);
 	else
 		status = execute_builtin(commands, builtin_type);
-	if (status != CMD_SUCCESS)
+	if (status == CMD_MALLOC_ERROR)
 		return (status);
-	return (0);
+	return (CMD_SUCCESS);
 }
 

@@ -80,7 +80,9 @@ int	main(int argc, char **argv, char **envp)
 			handle_error(status, input, token_arr, commands);
 			continue;
 		}
-		executor(commands, envp);
+		status = executor(commands, envp);
+		if (status == CMD_MALLOC_ERROR)
+			handle_error(status, input, token_arr, commands);
 		free_all(input, token_arr, commands);
 	}
 	return (0);
