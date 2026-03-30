@@ -41,6 +41,12 @@ typedef struct s_parser_state
 	int		token_count;
 }	t_parser_state;
 
+typedef struct	s_shell
+{
+	char		**envp;
+	t_command	*commands;
+}	t_shell;
+
 /* token types */
 # define TOKEN_WORD 0
 # define TOKEN_PIPE 1
@@ -82,6 +88,7 @@ void		print_commands(t_command *commands);
 void		print_token_arr(t_token *token_arr);
 
 int			build_commands(t_command **commands);
+char		**dup_envp(char **envp);
 t_token		*new_token(char *input, int len, int type);
 t_token		*add_back_token(t_token *new_token, t_token **arr_token);
 t_token		*free_token_arr(t_token *head);
