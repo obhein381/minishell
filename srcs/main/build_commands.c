@@ -37,12 +37,7 @@ static int	handle_build_error(int status, t_token **token_arr, t_command **comma
 		free_command_arr(*commands);
 	*token_arr = NULL;
 	*commands = NULL;
-	if (status == MALLOC_ERROR)
-	{
-		write(2, "malloc error\n", 13);
-		exit(1);
-	}
-	else if (status == PIPE_ERROR)
+	if (status == PIPE_ERROR)
 		write(2, "pipe error\n", 11);
 	else if (status == REDIR_ERROR)
 		write(2, "redir error\n", 12);
@@ -59,7 +54,10 @@ int	build_commands(t_command **commands)
 	*commands = NULL;
 	input = read_input();
 	if (input == NULL)
-		exit(0);
+	{
+		write(1, "exit\n", 5);
+		return (CMD_EOF);
+	}
 	status = tokenization(input, &token_arr);
 	free(input);
 	if (status != CMD_SUCCESS)

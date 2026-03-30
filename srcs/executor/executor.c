@@ -48,20 +48,22 @@ static int	handle_executor_error(int status)
 	return (status);
 }
 
-int	executor(t_command *commands, char **envp)
+int	executor(t_shell *shell)
 {
+	t_command	*commands;
 	int	builtin_type;
 	int	status;
 
+	commands = shell->commands;
 	if (commands == NULL)
 		return (NO_COMMAND);
 	if (commands->argv == NULL || commands->argv[0] == NULL)
 		return (CMD_UNKNOWN_ERR);
 	builtin_type = get_builtin_type(commands);
 	if (builtin_type == UNKNOWN_COMMAND)
-		status = execute_external(commands, envp);
+		status = execute_external(commands, shell->envp);
 	else
-		status = execute_builtin(commands, builtin_type);
+		status = execute_builtin(shell, builtin_type);
 	if (status != CMD_SUCCESS)
 		return (handle_executor_error(status));
 	return (CMD_SUCCESS);

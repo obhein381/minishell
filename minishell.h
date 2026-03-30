@@ -75,6 +75,7 @@ typedef struct	s_shell
 # define TOKEN_EMPTY 5
 # define NO_COMMAND 6
 # define EMPTY_ENVP 7
+# define READ_ERROR 8
 
 /* command path resolution status */
 # define CMD_SUCCESS 0
@@ -83,6 +84,7 @@ typedef struct	s_shell
 # define CMD_PERMISSION 126
 # define CMD_MALLOC_ERROR 9
 # define CMD_UNKNOWN_ERR 10
+# define CMD_EOF 11
 
 void		print_commands(t_command *commands);
 void		print_token_arr(t_token *token_arr);
@@ -101,7 +103,7 @@ int			parser_pipe(t_command **commands, t_command **cur, int token_count);
 int			parser_word(t_command **commands, t_parser_state state);
 int 		parser(t_token	*token_arr, t_command **commands);
 int			check_pipe_syntax(t_command *commands);
-int			executor(t_command *commands, char **envp);
+int			executor(t_shell *shell);
 int			handle_slash_command(char *command, char **path);
 int			get_path_index(char **envp);
 char		**make_dirs(char *command, char *path);
@@ -110,7 +112,7 @@ int			find_cmd_input_path(char **dirs, char **path);
 int			find_command_path(char *command, char **envp, char **path);
 int			execute_external(t_command *commands, char **envp);
 int			execute_echo(t_command *commands);
-int			execute_builtin(t_command *commands, int type);
+int			execute_builtin(t_shell *shell, int type);
 
 #endif
 /*

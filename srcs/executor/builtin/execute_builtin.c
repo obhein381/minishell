@@ -29,11 +29,11 @@ static int	call_cmd(t_command *commands, int type)
 	return (status);
 }
 
-int	execute_builtin(t_command *commands, int type)
+int	execute_builtin(t_shell *shell, int type)
 {
 	int	status;
 
-	status = call_cmd(commands, type);
+	status = call_cmd(shell->commands, type);
 	if (status != CMD_SUCCESS)
 		return (status);
 
