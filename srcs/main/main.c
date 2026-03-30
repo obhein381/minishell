@@ -12,53 +12,9 @@
 
 #include "minishell.h"
 
-static void	free_all(char *input, t_token *token_arr, t_command *commands)
-{
-	if (input != NULL)
-		free(input);
-	if (token_arr != NULL)
-		free_token_arr(token_arr);
-	if (commands != NULL)
-		free_command_arr(commands);
-}
-
-static char	*read_input(void)
-{
-	char	*input;
-
-	if (isatty(STDIN_FILENO))
-	{
-		input = readline("minishell$ ");
-		if (input == NULL)
-			exit(0);
-		if (*input)
-			add_history(input);
-	}
-	else
-		input = readline(NULL);
-	return (input);
-}
-
-static void	handle_error(int status, char *input, t_token *token_arr, t_command *commands)
-{
-	if (status == MALLOC_ERROR)
-	{
-		free_all(input, token_arr, commands);
-		write(2, "malloc error\n", 13);
-		exit(1);
-	}
-	else if (status == PIPE_ERROR)
-		write(2, "pipe error\n", 11);
-	else if (status == REDIR_ERROR)
-		write(2, "redir error\n", 12);
-	free_all(input, token_arr, commands);
-}
-
 int	main(int argc, char **argv, char **envp)
 {
-	char		*input;
 	int			status;
-	t_token		*token_arr;
 	t_command	*commands;
 
 	(void)argv;
@@ -66,24 +22,11 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		commands = NULL;
-		token_arr = NULL;
-		input = read_input();
-		status = tokenization(input, &token_arr);
-		if (status != 0)
-		{
-			handle_error(status, input, token_arr, commands);
+		status = build_commands(&commands);
+		if (status != CMD_SUCCESS)
 			continue ;
-		}
-		status = parser(token_arr, &commands);
-		if (status != 0)
-		{
-			handle_error(status, input, token_arr, commands);
-			continue;
-		}
 		status = executor(commands, envp);
-		if (status == CMD_MALLOC_ERROR)
-			handle_error(status, input, token_arr, commands);
-		free_all(input, token_arr, commands);
+		free_command_arr(commands);
 	}
 	return (0);
 }

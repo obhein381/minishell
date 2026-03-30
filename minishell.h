@@ -68,6 +68,7 @@ typedef struct s_parser_state
 # define FD_ERROR 4
 # define TOKEN_EMPTY 5
 # define NO_COMMAND 6
+# define EMPTY_ENVP 7
 
 /* command path resolution status */
 # define CMD_SUCCESS 0
@@ -80,6 +81,7 @@ typedef struct s_parser_state
 void		print_commands(t_command *commands);
 void		print_token_arr(t_token *token_arr);
 
+int			build_commands(t_command **commands);
 t_token		*new_token(char *input, int len, int type);
 t_token		*add_back_token(t_token *new_token, t_token **arr_token);
 t_token		*free_token_arr(t_token *head);

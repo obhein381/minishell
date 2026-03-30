@@ -38,20 +38,32 @@ int	get_builtin_type(t_command *commands)
 	return (type);
 }
 
+static int	handle_executor_error(int status)
+{
+	if (status == MALLOC_ERROR)
+	{
+		write(2, "malloc error\n", 13);
+		exit(1);
+	}
+	return (status);
+}
+
 int	executor(t_command *commands, char **envp)
 {
 	int	builtin_type;
 	int	status;
 
 	if (commands == NULL)
-		return (1);
+		return (NO_COMMAND);
+	if (commands->argv == NULL || commands->argv[0] == NULL)
+		return (CMD_UNKNOWN_ERR);
 	builtin_type = get_builtin_type(commands);
 	if (builtin_type == UNKNOWN_COMMAND)
 		status = execute_external(commands, envp);
 	else
 		status = execute_builtin(commands, builtin_type);
-	if (status == CMD_MALLOC_ERROR)
-		return (status);
+	if (status != CMD_SUCCESS)
+		return (handle_executor_error(status));
 	return (CMD_SUCCESS);
 }
 
