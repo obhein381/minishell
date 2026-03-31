@@ -12,13 +12,15 @@
 
 #include "minishell.h"
 
-static int	call_cmd(t_command *commands, int type)
+static int	call_cmd(t_shell *shell,  int type)
 {
 	int	status;
 
 	status = CMD_UNKNOWN_ERR;
 	if (type == COMMAND_ECHO)
-		status = execute_echo(commands);
+		status = execute_echo(shell->commands);
+	if (type == COMMAND_ENV)
+		status = execute_env(shell);
 	/*if (type == COMMAND_CD)
 	if (type == COMMAND_PWD)
 	if (type == COMMAND_EXPORT)
@@ -33,7 +35,7 @@ int	execute_builtin(t_shell *shell, int type)
 {
 	int	status;
 
-	status = call_cmd(shell->commands, type);
+	status = call_cmd(shell, type);
 	if (status != CMD_SUCCESS)
 		return (status);
 

@@ -112,6 +112,7 @@ int			find_cmd_input_path(char **dirs, char **path);
 int			find_command_path(char *command, char **envp, char **path);
 int			execute_external(t_command *commands, char **envp);
 int			execute_echo(t_command *commands);
+int			execute_env(t_shell *shell);
 int			execute_builtin(t_shell *shell, int type);
 
 #endif
