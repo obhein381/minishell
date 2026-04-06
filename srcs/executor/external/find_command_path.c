@@ -16,7 +16,6 @@ int	find_command_path(char *command, char **envp, char **path)
 {
 	int		path_index;
 	char	**dirs;
-	int		i;
 	int		status;
 
 	*path = NULL;
@@ -29,7 +28,6 @@ int	find_command_path(char *command, char **envp, char **path)
 	if (dirs == NULL)
 		return (CMD_MALLOC_ERROR);
 	status = find_cmd_input_path(dirs, path);
-	i = 0;
 	free_dirs(dirs);
 	return (status);
 }

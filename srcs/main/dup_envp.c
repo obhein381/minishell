@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static int	envp_len(char **envp)
+int	envp_len(char **envp)
 {
 	int	len;
 
@@ -22,7 +22,7 @@ static int	envp_len(char **envp)
 	return (len);
 }
 
-static void	free_envp(char **new_envp, int count)
+void	free_envp(char **new_envp, int count)
 {
 	int	i;
 
@@ -39,10 +39,11 @@ char	**dup_empty_envp(void)
 {
 	char **new_envp;
 
-	new_envp = malloc(sizeof(char *));
+	new_envp = malloc(sizeof(char *) * 2);
 	if (new_envp == NULL)
 		return (NULL);
 	new_envp[0] = NULL;
+	new_envp[1] = NULL;
 	return (new_envp);
 }
 
@@ -56,7 +57,7 @@ char	**dup_envp(char **envp)
 	if (envp == NULL)
 		return (dup_empty_envp());
 	len = envp_len(envp);
-	new_envp = malloc(sizeof(char *) * (len + 1));
+	new_envp = malloc(sizeof(char *) * (len + 2));
 	if (new_envp == NULL)
 		return (NULL);
 	i = 0;
@@ -71,6 +72,7 @@ char	**dup_envp(char **envp)
 		i++;
 	}
 	new_envp[i] = NULL;
+	new_envp[i + 1] = NULL;
 	return (new_envp);
 }
 

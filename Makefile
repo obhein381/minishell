@@ -11,10 +11,11 @@ SRCS = srcs/debug/debug_token.c srcs/debug/debug_commands.c \
 		srcs/parser/parser_word.c srcs/parser/parser_opt.c \
 		srcs/parser/parser_syntax.c \
 		srcs/parser/parser.c \
-		srcs/executor/external/find_command_path.c srcs/executor/external/find_command_path_utils.c\
+		srcs/executor/external/find_command_path.c srcs/executor/external/find_command_path_utils.c \
 		srcs/executor/external/execute_external.c \
 		srcs/executor/builtin/execute_builtin.c \
 		srcs/executor/builtin/execute_echo.c  srcs/executor/builtin/execute_env.c \
+		srcs/executor/builtin/execute_export.c srcs/executor/builtin/execute_export_opt.c \
 		srcs/executor/executor.c
 
 OBJS = $(SRCS:.c=.o)

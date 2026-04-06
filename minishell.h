@@ -85,12 +85,15 @@ typedef struct	s_shell
 # define CMD_MALLOC_ERROR 9
 # define CMD_UNKNOWN_ERR 10
 # define CMD_EOF 11
+# define CMD_FAILURE 12
 
 void		print_commands(t_command *commands);
 void		print_token_arr(t_token *token_arr);
 
 int			build_commands(t_command **commands);
 char		**dup_envp(char **envp);
+void		free_envp(char **new_envp, int count);
+int			envp_len(char **envp);
 t_token		*new_token(char *input, int len, int type);
 t_token		*add_back_token(t_token *new_token, t_token **arr_token);
 t_token		*free_token_arr(t_token *head);
@@ -113,6 +116,10 @@ int			find_command_path(char *command, char **envp, char **path);
 int			execute_external(t_command *commands, char **envp);
 int			execute_echo(t_command *commands);
 int			execute_env(t_shell *shell);
+int			find_key_index(char *argv);
+int			check_key(char *argv, int n);
+int			find_key_envp(char **envp, char *key, int key_index);
+int			execute_export(t_shell *shell);
 int			execute_builtin(t_shell *shell, int type);
 
 #endif
