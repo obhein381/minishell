@@ -28,6 +28,7 @@ typedef struct s_token
 typedef struct s_command
 {
 	char				**argv;
+	pid_t				pid;
 	int					count;
 	int					fd_in;
 	int					fd_out;
@@ -121,6 +122,12 @@ int			check_key(char *argv, int n);
 int			find_key_envp(char **envp, char *key, int key_index);
 int			execute_export(t_shell *shell);
 int			execute_builtin(t_shell *shell, int type);
+int			execute_multi_cmd(t_shell *shell);
+int			execute_single_cmd(t_command *command, t_shell *shell);
+int			get_builtin_type(t_command *commands);
+int			convert_exit_status(int status);
+int			execute_external_child(t_shell *shell, t_command *command);
+int			wait_all_child(t_command *commands);
 
 #endif
 /*

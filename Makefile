@@ -16,6 +16,7 @@ SRCS = srcs/debug/debug_token.c srcs/debug/debug_commands.c \
 		srcs/executor/builtin/execute_builtin.c \
 		srcs/executor/builtin/execute_echo.c  srcs/executor/builtin/execute_env.c \
 		srcs/executor/builtin/execute_export.c srcs/executor/builtin/execute_export_opt.c \
+		srcs/executor/execute_multi_cmd.c srcs/executor/execute_multi_cmd_opt.c \
 		srcs/executor/executor.c
 
 OBJS = $(SRCS:.c=.o)
