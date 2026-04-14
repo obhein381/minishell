@@ -50,7 +50,7 @@ static int	execute_child_cmd(t_command *command, t_shell *shell)
 	if (builtin_type == UNKNOWN_COMMAND)
 		status = execute_external_child(shell, command);
 	else
-		status = execute_builtin(shell, builtin_type);
+		status = execute_builtin(command, shell, builtin_type);
 	return (status);
 }
 

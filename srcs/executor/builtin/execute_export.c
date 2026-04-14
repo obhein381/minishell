@@ -58,7 +58,7 @@ static int	handle_error(int key_index, int *i, char *argv, int *status)
 	return (0);
 }
 
-int	execute_export(t_shell *shell)
+int	execute_export(t_command *command, t_shell *shell)
 {
 	char	**argv;
 	char	*entry;
@@ -66,10 +66,10 @@ int	execute_export(t_shell *shell)
 	int		key_index;
 	int		status;
 
-	if (shell == NULL || shell->envp == NULL || shell->commands == NULL
-		|| shell->commands->argv == NULL)
+	if (shell == NULL || shell->envp == NULL || command == NULL
+		|| command->argv == NULL)
 		return (CMD_SUCCESS);
-	argv = shell->commands->argv;
+	argv = command->argv;
 	if (argv[1] == NULL)
 		return(execute_env(shell));
 	status = CMD_SUCCESS;
