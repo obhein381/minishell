@@ -42,10 +42,15 @@ int	wait_all_child(t_command *commands)
 
 	while (commands != NULL)
 	{
-		waitpid(commands->pid, &status, 0);
+		if (waitpid(commands->pid, &status, 0) == -1)
+		{
+			if (errno == EINTR)
+				continue ;
+			perror("waitpid");
+		}
 		commands = commands->next;
 	}
-	return (status);
+	return (convert_exit_status(status));
 }
 
 void	close_all_fd(int *fd)
