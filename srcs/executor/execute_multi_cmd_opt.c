@@ -47,3 +47,11 @@ int	wait_all_child(t_command *commands)
 	}
 	return (status);
 }
+
+void	close_all_fd(int *fd)
+{
+	if (fd == NULL)
+		return ;
+	close(fd[0]);
+	close(fd[1]);
+}
