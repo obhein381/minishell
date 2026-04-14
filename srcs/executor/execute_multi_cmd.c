@@ -12,10 +12,23 @@
 
 #include "minishell.h"
 
-static int	handling_error(char *command)
+static int	handling_error(char *command, t_command *commands, t_command *last_cmd)
 {
+	int	status;
+
+	status = 1;
 	perror(command);
-	return (1);
+	while (commands != last_cmd)
+	{
+		if (waitpid(commands->pid, &status, 0) == -1)
+		{
+			if (errno == EINTR)
+				continue ;
+			perror("waitpid");
+		}
+		commands = commands->next;
+	}
+	return (convert_exit_status(status));
 }
 
 static void	handling_dup_error(void)
@@ -73,10 +86,20 @@ int	execute_multi_cmd(t_shell *shell)
 	{
 		if (head->next != NULL)
 			if (pipe(fd) < 0)
-				return (handling_error("pipe"));
+			{
+				if (prev_read != -1)
+					close(prev_read);
+				return (handling_error("pipe", shell->commands, head));
+			}
 		head->pid = fork();
 		if (head->pid < 0)
-			return (handling_error("fork"));
+		{
+			if (prev_read != -1)
+				close(prev_read);
+			if (head->next != NULL)
+				close_all_fd(fd);
+			return (handling_error("fork", shell->commands, head));
+		}
 		if (head->pid == 0)
 		{
 			execute_redir(head, fd, &prev_read);

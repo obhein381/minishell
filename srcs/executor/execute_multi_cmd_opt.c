@@ -40,6 +40,7 @@ int	wait_all_child(t_command *commands)
 {
 	int	status;
 
+	status = 1;
 	while (commands != NULL)
 	{
 		if (waitpid(commands->pid, &status, 0) == -1)
@@ -47,6 +48,7 @@ int	wait_all_child(t_command *commands)
 			if (errno == EINTR)
 				continue ;
 			perror("waitpid");
+			return (1);
 		}
 		commands = commands->next;
 	}
