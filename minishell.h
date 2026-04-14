@@ -128,6 +128,7 @@ int			get_builtin_type(t_command *commands);
 int			convert_exit_status(int status);
 int			execute_external_child(t_shell *shell, t_command *command);
 int			wait_all_child(t_command *commands);
+void		close_all_fd(int *fd);
 
 #endif
 /*

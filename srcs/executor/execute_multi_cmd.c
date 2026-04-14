@@ -18,23 +18,30 @@ static int	handling_error(char *command)
 	return (1);
 }
 
+static void	handling_dup_error(void)
+{
+	perror("dup2");
+	exit(1);
+}
+
 static	void	execute_redir(t_command *command, int *fd, int *prev_read)
 {
 	if (*prev_read != -1)
-		dup2(*prev_read, STDIN_FILENO);
+		if (dup2(*prev_read, STDIN_FILENO) == -1)
+			handling_dup_error();
 	if (command->next != NULL)
-		dup2(fd[1], STDOUT_FILENO);
+		if (dup2(fd[1], STDOUT_FILENO) == -1)
+			handling_dup_error();
 	if (command->fd_in != -1)
-		dup2(command->fd_in, STDIN_FILENO);
+		if (dup2(command->fd_in, STDIN_FILENO) == -1)
+			handling_dup_error();
 	if (command->fd_out != -1)
-		dup2(command->fd_out, STDOUT_FILENO);
+		if (dup2(command->fd_out, STDOUT_FILENO) == -1)
+			handling_dup_error();
 	if (*prev_read != -1)
 		close(*prev_read);
 	if (command->next != NULL)
-	{
-		close(fd[0]);
-		close(fd[1]);
-	}
+		close_all_fd(fd);
 	if (command->fd_in != -1)
 		close(command->fd_in);
 	if (command->fd_out != -1)
