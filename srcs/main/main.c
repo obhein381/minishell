@@ -36,9 +36,9 @@ void	free_shell(t_shell *shell)
 	}
 }
 
-void	handling_malloc_error(t_shell *shell)
+static void	handling_exit_error(t_shell *shell, char *command)
 {
-	write(2, "malloc error\n", 13);
+	write(2, command, ft_strlen(command));
 	free_shell(shell);
 	exit(1);
 }
@@ -52,14 +52,16 @@ void	init_shell(t_shell *shell, char **envp)
 	shell->envp = dup_envp(envp);
 	if (shell->envp == NULL)
 	{
-		handling_malloc_error(shell);
+		handling_exit_error(shell, "malloc error\n");
 	}
 }
 
 int	handle_main_status(int status, t_shell *shell, t_command **commands)
 {
 	if (status == CMD_MALLOC_ERROR)
-		handling_malloc_error(shell);
+		handling_exit_error(shell, "malloc error\n");
+	if (status == CMD_ROLLBACK_ERROR)
+		handling_exit_error(shell, "rollback error\n");
 	if (status == CMD_EOF)
 	{
 		free_shell(shell);
@@ -73,7 +75,7 @@ int	handle_main_status(int status, t_shell *shell, t_command **commands)
 		shell->commands = NULL;
 		return (1);
 	}
-	return (0);\
+	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)

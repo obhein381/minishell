@@ -87,6 +87,8 @@ typedef struct	s_shell
 # define CMD_UNKNOWN_ERR 10
 # define CMD_EOF 11
 # define CMD_FAILURE 12
+# define CMD_DUP_ERROR 13
+# define CMD_ROLLBACK_ERROR 14
 
 void		print_commands(t_command *commands);
 void		print_token_arr(t_token *token_arr);

@@ -38,16 +38,6 @@ int	get_builtin_type(t_command *commands)
 	return (type);
 }
 
-static int	handle_executor_error(int status)
-{
-	if (status == MALLOC_ERROR)
-	{
-		write(2, "malloc error\n", 13);
-		exit(1);
-	}
-	return (status);
-}
-
 int	execute_single_cmd(t_command *command, t_shell *shell)
 {
 	int	builtin_type;
@@ -76,8 +66,6 @@ int	executor(t_shell *shell)
 		status = execute_single_cmd(commands, shell);
 	else
 		status = execute_multi_cmd(shell);
-	if (status != CMD_SUCCESS)
-		return (handle_executor_error(status));
-	return (CMD_SUCCESS);
+	return (status);
 }
 
