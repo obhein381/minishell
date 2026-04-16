@@ -49,6 +49,7 @@ void	init_shell(t_shell *shell, char **envp)
 {
 	shell->commands = NULL;
 	shell->envp = NULL;
+	shell->input = NULL;
 	shell->envp = dup_envp(envp);
 	if (shell->envp == NULL)
 	{
@@ -90,7 +91,7 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		commands = NULL;
-		status = build_commands(&commands);
+		status = build_commands(&commands, &shell);
 		if (handle_main_status(status, &shell, &commands))
 			continue ;
 		shell.commands = commands;

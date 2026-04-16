@@ -44,22 +44,21 @@ static int	handle_build_error(int status, t_token **token_arr, t_command **comma
 	return (status);
 }
 
-int	build_commands(t_command **commands)
+int	build_commands(t_command **commands, t_shell *shell)
 {
-	char	*input;
 	int		status;
 	t_token	*token_arr;
 
 	token_arr = NULL;
 	*commands = NULL;
-	input = read_input();
-	if (input == NULL)
+	shell->input = read_input();
+	if (shell->input == NULL)
 	{
 		write(1, "exit\n", 5);
 		return (CMD_EOF);
 	}
-	status = tokenization(input, &token_arr);
-	free(input);
+	status = tokenization(shell->input, &token_arr, shell);
+	free(shell->input);
 	if (status != CMD_SUCCESS)
 		return (handle_build_error(status, &token_arr, commands));
 	status = parser(token_arr, commands);

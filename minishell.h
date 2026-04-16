@@ -44,6 +44,7 @@ typedef struct s_parser_state
 
 typedef struct	s_shell
 {
+	char		*input;
 	char		**envp;
 	t_command	*commands;
 }	t_shell;
@@ -56,6 +57,8 @@ typedef struct	s_shell
 # define TOKEN_REDIR_IN 4
 # define TOKEN_HEREDOC 5
 # define TOKEN_SPACE 6
+# define TOKEN_SIG_QUOTE 7
+# define TOKEN_DOU_QUOTE 8
 
 /* builtin command types */
 # define UNKNOWN_COMMAND 0
@@ -89,18 +92,20 @@ typedef struct	s_shell
 # define CMD_FAILURE 12
 # define CMD_DUP_ERROR 13
 # define CMD_ROLLBACK_ERROR 14
+# define CMD_QUOTE_ERROR 15
 
 void		print_commands(t_command *commands);
 void		print_token_arr(t_token *token_arr);
 
-int			build_commands(t_command **commands);
+int			build_commands(t_command **commands, t_shell *shell);
 char		**dup_envp(char **envp);
 void		free_envp(char **new_envp, int count);
 int			envp_len(char **envp);
 t_token		*new_token(char *input, int len, int type);
 t_token		*add_back_token(t_token *new_token, t_token **arr_token);
-t_token		*free_token_arr(t_token *head);
-int			tokenization(char *input, t_token **token_arr);
+void		free_token_arr(t_token *head);
+int			identify_token(char *input);
+int			tokenization(char *input, t_token **token_arr, t_shell *shell);
 t_command	*add_back_command(t_command **commands, t_command *new);
 t_command	*new_command(int token_count);
 t_command	*free_command_arr(t_command *head);
@@ -131,6 +136,8 @@ int			convert_exit_status(int status);
 int			execute_external_child(t_shell *shell, t_command *command);
 int			wait_all_child(t_command *commands);
 void		close_all_fd(int *fd);
+int			add_token_sig_quote(t_token **token_arr, char *input, int *i, int type);
+int			add_token_dou_quote(t_token **token_arr, t_shell *shell, int *i, int type);
 
 #endif
 /*

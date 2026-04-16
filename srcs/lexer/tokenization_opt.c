@@ -57,7 +57,7 @@ t_token	*add_back_token(t_token *new_token, t_token **token_arr)
 	return(*token_arr);
 }
 
-t_token	*free_token_arr(t_token *head)
+void	free_token_arr(t_token *head)
 {
 	t_token	*next;
 
@@ -68,6 +68,5 @@ t_token	*free_token_arr(t_token *head)
 		free(head);
 		head = next;
 	}
-	return (NULL);
 }
 
