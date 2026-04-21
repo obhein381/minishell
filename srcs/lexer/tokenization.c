@@ -29,18 +29,35 @@ int	identify_token(char *input)
 	return (TOKEN_WORD);
 }
 
-static int	add_token_word(t_token **token_arr, t_shell *shell, int *i, int type)
+int	end_of_word(char *input, int *sig_quote_sign, int *dou_quote_sign)
+{
+	if (*input == '\'' && *dou_quote_sign == 0)
+		*sig_quote_sign = !(*sig_quote_sign);
+	else if (*input == '\"' && *sig_quote_sign == 0)
+		*dou_quote_sign = !(*dou_quote_sign);
+	else if (identify_token(input) != TOKEN_WORD && *dou_quote_sign == 0 && *sig_quote_sign == 0)
+		return (1);
+	return (0);
+}
+
+static int	add_token_word(t_token **token_arr, char *input, int *i, int type)
 {
 	int		len;
-	char	*input;
+	int		sig_quote_sign;
+	int		dou_quote_sign;
 	t_token	*new;
 
-	input = shell->input;
 	len = 0;
-	while (input[len + *i] != '\0' && identify_token(&input[len + *i]) == TOKEN_WORD)
+	sig_quote_sign = 0;
+	dou_quote_sign = 0;
+	while (input[len + *i] != '\0')
 	{
+		if (end_of_word (&input[len + *i], &sig_quote_sign, &dou_quote_sign) == 1)
+			break;
 		len++;
 	}
+	if (sig_quote_sign != 0 || dou_quote_sign != 0)
+		return (CMD_QUOTE_ERROR);
 	new = new_token(&input[*i], len, type);
 	if (new == NULL)
 	{
@@ -71,13 +88,13 @@ static int	add_token_op(t_token **token_arr, char *input, int *i, int type)
 		return(MALLOC_ERROR);
 	}
 	*token_arr = add_back_token(new, token_arr);
-	*i = *i + len;
 	if (*token_arr == NULL)
 		return (MALLOC_ERROR);
+	*i = *i + len;
 	return(CMD_SUCCESS);
 }
 
-int	tokenization(char *input, t_token **token_arr, t_shell *shell)
+int	tokenization(char *input, t_token **token_arr)
 {
 	int		i;
 	int		token_type;
@@ -91,7 +108,7 @@ int	tokenization(char *input, t_token **token_arr, t_shell *shell)
 		if (token_type == TOKEN_SPACE)
 			i++;
 		else if (token_type == TOKEN_WORD)
-			status = add_token_word(token_arr, shell, &i, token_type);
+			status = add_token_word(token_arr, input, &i, token_type);
 		else
 			status = add_token_op(token_arr, &input[i], &i, token_type);
 		if (status != CMD_SUCCESS)
@@ -99,5 +116,3 @@ int	tokenization(char *input, t_token **token_arr, t_shell *shell)
 	}
 	return (status);
 }
-
-

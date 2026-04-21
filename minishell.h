@@ -105,7 +105,7 @@ t_token		*new_token(char *input, int len, int type);
 t_token		*add_back_token(t_token *new_token, t_token **arr_token);
 void		free_token_arr(t_token *head);
 int			identify_token(char *input);
-int			tokenization(char *input, t_token **token_arr, t_shell *shell);
+int			tokenization(char *input, t_token **token_arr);
 t_command	*add_back_command(t_command **commands, t_command *new);
 t_command	*new_command(int token_count);
 t_command	*free_command_arr(t_command *head);
@@ -136,8 +136,6 @@ int			convert_exit_status(int status);
 int			execute_external_child(t_shell *shell, t_command *command);
 int			wait_all_child(t_command *commands);
 void		close_all_fd(int *fd);
-int			add_token_sig_quote(t_token **token_arr, char *input, int *i, int type);
-int			add_token_dou_quote(t_token **token_arr, t_shell *shell, int *i, int type);
 
 #endif
 /*

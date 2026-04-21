@@ -57,7 +57,7 @@ int	build_commands(t_command **commands, t_shell *shell)
 		write(1, "exit\n", 5);
 		return (CMD_EOF);
 	}
-	status = tokenization(shell->input, &token_arr, shell);
+	status = tokenization(shell->input, &token_arr);
 	free(shell->input);
 	if (status != CMD_SUCCESS)
 		return (handle_build_error(status, &token_arr, commands));
