@@ -59,6 +59,8 @@ typedef struct	s_shell
 # define TOKEN_SPACE 6
 # define TOKEN_SIG_QUOTE 7
 # define TOKEN_DOU_QUOTE 8
+# define IS_SIG_QUOTE 9
+# define IS_DOU_QUOTE 10
 
 /* builtin command types */
 # define UNKNOWN_COMMAND 0
@@ -97,6 +99,8 @@ typedef struct	s_shell
 void		print_commands(t_command *commands);
 void		print_token_arr(t_token *token_arr);
 
+int			expander(t_shell *shell, t_token **token_arr);
+int			handling_sig_quote(char **word, int *i);
 int			build_commands(t_command **commands, t_shell *shell);
 char		**dup_envp(char **envp);
 void		free_envp(char **new_envp, int count);
