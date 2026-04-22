@@ -100,6 +100,7 @@ void		print_commands(t_command *commands);
 void		print_token_arr(t_token *token_arr);
 
 int			expander(t_shell *shell, t_token **token_arr);
+int			handling_dou_quote(char **word, int *i);
 int			handling_sig_quote(char **word, int *i);
 int			build_commands(t_command **commands, t_shell *shell);
 char		**dup_envp(char **envp);

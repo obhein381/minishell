@@ -28,7 +28,13 @@ int	handling_quote(t_token *token_arr)
 				return (state);
 			continue ;
 		}
-	//	if (token_arr->value[i] == '\"')
+		if (token_arr->value[i] == '\"')
+		{
+			state = handling_dou_quote(&(token_arr->value), &i);
+			if (state != CMD_SUCCESS)
+				return (state);
+			continue ;
+		}
 	//		state = handling_dou_quote(token_arr, &i);
 	//	if (token_arr->value[i] == '$')
 		i++;

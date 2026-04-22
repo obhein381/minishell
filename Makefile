@@ -7,6 +7,7 @@ SRCS = srcs/debug/debug_token.c srcs/debug/debug_commands.c \
 		srcs/main/build_commands.c srcs/main/dup_envp.c \
 		srcs/main/main.c \
 		srcs/expander/handling_sig_quote.c \
+		srcs/expander/handling_dou_quote.c \
 		srcs/expander/expander.c \
 		srcs/lexer/tokenization.c srcs/lexer/tokenization_opt.c \
 		srcs/parser/parser_redir.c srcs/parser/parser_pipe.c \
