@@ -12,38 +12,87 @@
 
 #include "minishell.h"
 
-int	load_env(t_shell *shell, char **env_var)
+int	make_f_str(char **f_str, char *word, int *i)
 {
-	int		i;
-	int		j;
+	int	j;
+
+	*f_str = malloc(*i + 2);
+	if (*f_str == NULL)
+		return (CMD_MALLOC_ERROR);
+	j = 0;
+	while (j < *i)
+	{
+		(*f_str)[j] = word[j];
+		j++;
+	}
+	(*f_str)[j] = '\0';
+	(*i)++;
+	return (CMD_SUCCESS);
+}
+
+int	make_env_var(char **env_var, char *word, int *i)
+{
+	int	j;
+
+	*env_var = malloc(ft_strlen(word) + 1);
+	if (*env_var == NULL)
+		return (CMD_MALLOC_ERROR);
+	j = 0;
+	if (word[*i] == '?')
+	{
+		ft_strlcpy(*env_var, "?", 2);
+		(*i)++;
+		return (CMD_SUCCESS);
+	}
+	if (ft_isalpha(word[*i]) || word[*i] == '_')
+	{
+		while (ft_isalnum(word[*i]) || word[*i] == '_')
+		{
+			(*env_var)[j] = word[*i];
+			j++;
+			(*i)++;
+		}
+	}
+	(*env_var)[j] = '\0';
+	return (CMD_SUCCESS);
+}
+
+int	make_s_str(char **s_str, char *word, int *i)
+{
+	int j;
+
+	*s_str = malloc(ft_strlen(word) + 1);
+	if (*s_str == NULL)
+		return (CMD_MALLOC_ERROR);
+	(*s_str)[0] = '\0';
+	j = 0;
+	while (word[*i] != '\0')
+	{
+		(*s_str)[j] = word[*i];
+		j++;
+		(*i)++;
+	}
+	(*s_str)[j] = '\0';
+	return (CMD_SUCCESS);
+}
+
+char	*all_str_join(char *f_str, char *env_var, char *s_str, int *i)
+{
+	char	*temp;
 	char	*result;
 
-	i = 0;
-	while (shell->envp[i] != NULL)
-	{
-		j = 0;
-		while(shell->envp[i][j] != '\0' && shell->envp[i][j] != '=')
-		{
-			if((*env_var)[j] != shell->envp[i][j])
-				break ;
-			j++;
-		}
-		if (shell->envp[i][j] == '=' && (*env_var)[j] == '\0')
-		{
-			free(*env_var);
-			*env_var = ft_strdup(&(shell->envp[i][j + 1]));
-			if (*env_var == NULL)
-				return (CMD_MALLOC_ERROR);
-			return (CMD_SUCCESS);
-		}
-		i++;
-	}
-	result = ft_strjoin("$", *env_var);
+	temp = ft_strjoin(f_str, env_var);
+	if (temp == NULL)
+		return (NULL);
+	result = ft_strjoin(temp, s_str);
 	if (result == NULL)
-		return (CMD_MALLOC_ERROR);
-	free(*env_var);
-	*env_var = result;
-	return (CMD_SUCCESS);
+	{
+		free(temp);
+		return (NULL);
+	}
+	*i = ft_strlen(f_str) + ft_strlen(env_var);
+	free(temp);
+	return (result);
 }
 
 int	handling_cash(t_shell *shell, char **word, int *i)
@@ -52,80 +101,25 @@ int	handling_cash(t_shell *shell, char **word, int *i)
 	char	*s_str;
 	char	*env_var;
 	char	*temp;
-	int		j;
 	int		state;
 
-	f_str = malloc(*i + 2);
-	if (f_str == NULL)
-		return (CMD_MALLOC_ERROR);
-	j = 0;
-	while(j < *i)
-	{
-		f_str[j] = (*word)[j];
-		j++;
-	}
-	f_str[j] = '\0';
-	(*i)++;
-	env_var = malloc(ft_strlen(*word) + 1);
-	if (env_var == NULL)
-	{
-		free(f_str);
-		return (CMD_MALLOC_ERROR);
-	}
-	j = 0;
-	while ((*word)[*i] != '\0' && (*word)[*i] != ' ' && (*word)[*i] != '\t' && (*word)[*i] != '\"')
-	{
-		env_var[j] = (*word)[*i];
-		j++;
-		(*i)++;
-	}
-	env_var[j] = '\0';
+	init_cash(&f_str, &s_str, &env_var);
+	state =  make_f_str(&f_str, *word, i);
+	if (state != CMD_SUCCESS)
+		return (handle_cash_free(state, f_str, s_str, env_var));
+	state = make_env_var(&env_var, *word, i);
+	if (state != CMD_SUCCESS)
+		return (handle_cash_free(state, f_str, s_str, env_var));
 	state = load_env(shell, &env_var);
 	if (state != CMD_SUCCESS)
-	{
-		free(f_str);
-		free(env_var);
-		return (CMD_MALLOC_ERROR);
-	}
-	s_str = malloc(ft_strlen(*word) + 1);
-	if (s_str == NULL)
-	{
-		free(f_str);
-		free(env_var);
-		return (CMD_MALLOC_ERROR);
-	}
-	s_str[0] = '\0';
-	j = 0;
-	while ((*word)[*i] != '\0')
-	{
-		s_str[j] = (*word)[*i];
-		j++;
-		(*i)++;
-	}
-	s_str[j] = '\0';
-	temp = NULL;
-	temp = ft_strjoin(f_str, env_var);
+		return (handle_cash_free(state, f_str, s_str, env_var));
+	state = make_s_str(&s_str, *word, i);
+	if (state != CMD_SUCCESS)
+		return (handle_cash_free(state, f_str, s_str, env_var));
+	temp = all_str_join(f_str, env_var, s_str, i);
 	if (temp == NULL)
-	{
-		free(f_str);
-		free(env_var);
-		free(s_str);
-		return (CMD_MALLOC_ERROR);
-	}
+		return (handle_cash_free(CMD_MALLOC_ERROR, f_str, s_str, env_var));
 	free(*word);
-	*word = ft_strjoin(temp, s_str);
-	if (*word == NULL)
-	{
-		free(f_str);
-		free(s_str);
-		free(temp);
-		free(env_var);
-		return (CMD_MALLOC_ERROR);
-	}
-	*i = ft_strlen(f_str) + ft_strlen(env_var);
-	free(f_str);
-	free(env_var);
-	free(s_str);
-	free(temp);
-	return (CMD_SUCCESS);
+	*word = temp;
+	return (handle_cash_free(CMD_SUCCESS, f_str, s_str, env_var));
 }

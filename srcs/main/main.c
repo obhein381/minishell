@@ -51,6 +51,7 @@ void	init_shell(t_shell *shell, char **envp)
 	shell->envp = NULL;
 	shell->input = NULL;
 	shell->envp = dup_envp(envp);
+	shell->exit_status = CMD_SUCCESS;
 	if (shell->envp == NULL)
 	{
 		handling_exit_error(shell, "malloc error\n");

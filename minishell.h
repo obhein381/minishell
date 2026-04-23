@@ -46,6 +46,7 @@ typedef struct	s_shell
 {
 	char		*input;
 	char		**envp;
+	int			exit_status;
 	t_command	*commands;
 }	t_shell;
 
@@ -103,6 +104,9 @@ int			expander(t_shell *shell, t_token **token_arr);
 int			handling_quote(t_shell *shell, t_token *token_arr);
 int			handling_dou_quote(t_shell *shell, char **word, int *i);
 int			handling_sig_quote(char **word, int *i);
+int			load_env(t_shell *shell, char **env_var);
+void		init_cash(char **f_str, char **s_str, char **env_var);
+int			handle_cash_free(int state, char *f_str, char *s_str, char *env_var);
 int			handling_cash(t_shell *shell, char **word, int *i);
 int			build_commands(t_command **commands, t_shell *shell);
 char		**dup_envp(char **envp);
