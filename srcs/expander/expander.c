@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	handling_quote(t_token *token_arr)
+int	handling_quote(t_shell *shell, t_token *token_arr)
 {
 	int		i;
 	int		state;
@@ -30,7 +30,7 @@ int	handling_quote(t_token *token_arr)
 		}
 		if (token_arr->value[i] == '\"')
 		{
-			state = handling_dou_quote(&(token_arr->value), &i);
+			state = handling_dou_quote(shell, &(token_arr->value), &i);
 			if (state != CMD_SUCCESS)
 				return (state);
 			continue ;
@@ -54,7 +54,7 @@ int	expander(t_shell *shell, t_token **token_arr)
 	{
 		if (head->type == TOKEN_WORD)
 		{
-			state = handling_quote(head);
+			state = handling_quote(shell, head);
 			if (state != CMD_SUCCESS)
 				return (state);
 		}

@@ -12,47 +12,33 @@
 
 #include "minishell.h"
 
-int	handling_dou_quote(char **word, int *i)
+void	remove_quote(char **word, int i)
 {
-	char	*result;
-	int		j;
-	//int		state;
-	int		len;
-
-	len =ft_strlen(*word) - 1;
-	result = malloc(len);
-	if (result == NULL)
-		return (CMD_MALLOC_ERROR);
-	j = 0;
-	while (j < *i)
+	while ((*word)[i + 1] != '\0')
 	{
-		result[j] = (*word)[j];
-		j++;
+		(*word)[i] = (*word)[i + 1];
+		i++;
 	}
-	(*i)++;
+(*word)[i] = (*word)[i + 1];
+}
+
+int	handling_dou_quote(t_shell *shell, char **word, int *i)
+{
+	int		state;
+
+	(void)shell;
+	remove_quote(word, *i);
 	while ((*word)[*i] != '\"')
 	{
-		result[j] = (*word)[*i];
-		/*if ((*word)[*i] == '$')
+		if ((*word)[*i] != '\0' &&(*word)[*i] == '$')
 		{
-			state = handling_cash();
+			state = handling_cash(shell, word, i);
 			if (state != CMD_SUCCESS)
 				return (state);
 			continue ;
-		}*/
-		j++;
+		}
 		(*i)++;
 	}
-	(*i)++;
-	while ((*word)[*i] != '\0')
-	{
-		result[j] = (*word)[*i];
-		j++;
-		(*i)++;
-	}
-	result[j] = '\0';
-	free(*word);
-	*word = result;
-	*i = 0;
+	remove_quote(word, *i);
 	return (CMD_SUCCESS);
 }
