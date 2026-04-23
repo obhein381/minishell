@@ -35,8 +35,16 @@ int	handling_quote(t_shell *shell, t_token *token_arr)
 				return (state);
 			continue ;
 		}
-	//		state = handling_dou_quote(token_arr, &i);
-	//	if (token_arr->value[i] == '$')
+		if (token_arr->value[i] == '$'
+		&& (token_arr->value[i + 1] == '?'
+			|| ft_isalpha(token_arr->value[i + 1])
+			|| token_arr->value[i + 1] == '_'))
+		{
+			state = handling_cash(shell, &(token_arr->value), &i);
+			if (state != CMD_SUCCESS)
+				return (state);
+			continue ;
+		}
 		i++;
 	}
 	return (CMD_SUCCESS);
