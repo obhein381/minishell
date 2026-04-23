@@ -12,38 +12,25 @@
 
 #include "minishell.h"
 
+static void	remove_quote(char **word, int i)
+{
+	while ((*word)[i + 1] != '\0')
+	{
+		(*word)[i] = (*word)[i + 1];
+		i++;
+	}
+(*word)[i] = (*word)[i + 1];
+}
+
 int	handling_sig_quote(char **word, int *i)
 {
-	char	*result;
-	int		j;
-
-	result = malloc(ft_strlen(*word) - 1);
-	if (result == NULL)
-		return (CMD_MALLOC_ERROR);
-	j = 0;
-	while (j < *i)
+	remove_quote(word, *i);
+	while ((*word)[*i] != '\0' && (*word)[*i] != '\'')
 	{
-		result[j] = (*word)[j];
-		j++;
-	}
-	(*i)++;
-	while ((*word)[*i] != '\'')
-	{
-		result[j] = (*word)[*i];
-		j++;
 		(*i)++;
 	}
-	(*i)++;
-	while ((*word)[*i] != '\0')
-	{
-		result[j] = (*word)[*i];
-		j++;
-		(*i)++;
-	}
-	result[j] = '\0';
-	free(*word);
-	*word = result;
-	*i = 0;
+	if ((*word)[*i] == '\'')
+		remove_quote(word, *i);
 	return (CMD_SUCCESS);
 }
 

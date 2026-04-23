@@ -12,14 +12,14 @@
 
 #include "minishell.h"
 
-void	remove_quote(char **word, int i)
+static void	remove_quote(char **word, int i)
 {
 	while ((*word)[i + 1] != '\0')
 	{
 		(*word)[i] = (*word)[i + 1];
 		i++;
 	}
-(*word)[i] = (*word)[i + 1];
+	(*word)[i] = (*word)[i + 1];
 }
 
 int	handling_dou_quote(t_shell *shell, char **word, int *i)
