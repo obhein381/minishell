@@ -13,11 +13,12 @@
 #include "minishell.h"
 #include <stdio.h>
 
-int	fd_heredoc(t_token *file_token)
+int	fd_heredoc(t_shell *shell, t_token *file_token)
 {
 	char	*eof;
 	int		pipe_fd[2];
 	char	*line;
+	int		i;
 
 	eof = file_token->value;
 	if (pipe(pipe_fd) == -1)
@@ -32,6 +33,22 @@ int	fd_heredoc(t_token *file_token)
 			free(line);
 			break ;
 		}
+		i = 0;
+		while (line[i] != '\0')
+		{
+			if (is_valid_var_start(line, i) == 1)
+			{
+				handling_cash(shell, &line, &i);
+				if (line == NULL)
+				{
+					close(pipe_fd[1]);
+					close(pipe_fd[0]);
+					return (HEREDOC_MALLOC_ERROR);
+				}
+			}
+			else
+				i++;
+		}
 		write(pipe_fd[1], line, ft_strlen(line));
 		write(pipe_fd[1], "\n", 1);
 		free(line);
@@ -40,7 +57,7 @@ int	fd_heredoc(t_token *file_token)
 	return (pipe_fd[0]);
 }
 
-int	get_redir_fd(t_token *file_token, int type)
+int	get_redir_fd(t_shell *shell, t_token *file_token, int type)
 {
 	int	fd;
 
@@ -51,9 +68,13 @@ int	get_redir_fd(t_token *file_token, int type)
 	else if (type == TOKEN_APPEND)
 		fd = open(file_token->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
-		return (fd_heredoc(file_token));
+		return (fd_heredoc(shell, file_token));
 	if (fd < 0)
+	{
+		if (fd == HEREDOC_MALLOC_ERROR)
+			return (HEREDOC_MALLOC_ERROR);
 		return (perror(file_token->value), -1);
+	}
 	return (fd);
 }
 
@@ -74,7 +95,7 @@ void apply_redirection(t_command **commands, int type, int fd)
 	return ;
 }
 
-int	parser_redir(t_command **commands, t_parser_state *state)
+int	parser_redir(t_shell *shell, t_command **commands, t_parser_state *state)
 {
 	int	fd;
 	t_token	*file_token;
@@ -82,7 +103,9 @@ int	parser_redir(t_command **commands, t_parser_state *state)
 	file_token = state->cur->next;
 	if (file_token == NULL || file_token->type != TOKEN_WORD)
 		return (REDIR_ERROR);
-	fd = get_redir_fd(file_token, state->cur->type);
+	fd = get_redir_fd(shell, file_token, state->cur->type);
+	if (fd == HEREDOC_MALLOC_ERROR)
+		return (HEREDOC_MALLOC_ERROR);
 	if (fd < 0)
 		return (FD_ERROR);
 	apply_redirection(commands, state->cur->type, fd);

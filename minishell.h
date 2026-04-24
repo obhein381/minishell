@@ -75,6 +75,7 @@ typedef struct	s_shell
 # define COMMAND_MIN_N 20
 
 /* parser / runtime errors */
+# define HEREDOC_MALLOC_ERROR -100
 # define MALLOC_ERROR 9
 # define PIPE_ERROR 2
 # define REDIR_ERROR 3
@@ -100,6 +101,7 @@ typedef struct	s_shell
 void		print_commands(t_command *commands);
 void		print_token_arr(t_token *token_arr);
 
+int			is_valid_var_start(char	*str, int i);
 int			expander(t_shell *shell, t_token **token_arr);
 int			handling_quote(t_shell *shell, t_token *token_arr);
 int			handling_dou_quote(t_shell *shell, char **word, int *i);
@@ -120,11 +122,12 @@ int			tokenization(char *input, t_token **token_arr);
 t_command	*add_back_command(t_command **commands, t_command *new);
 t_command	*new_command(int token_count);
 t_command	*free_command_arr(t_command *head);
-int			parser_redir(t_command **commands, t_parser_state *state);
+int			parser_redir(t_shell *shell, t_command **commands, t_parser_state *state);
 int			parser_pipe(t_command **commands, t_command **cur, int token_count);
 int			parser_word(t_command **commands, t_parser_state state);
-int 		parser(t_token	*token_arr, t_command **commands);
+int 		parser(t_shell *shell, t_token	*token_arr, t_command **commands);
 int			check_pipe_syntax(t_command *commands);
+void		execute_redir(t_command *command, int *fd, int *prev_read);
 int			executor(t_shell *shell);
 int			handle_slash_command(char *command, char **path);
 int			get_path_index(char **envp);
