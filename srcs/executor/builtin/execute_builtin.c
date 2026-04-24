@@ -33,47 +33,46 @@ static int	call_cmd(t_command *command, t_shell *shell,  int type)
 	return (status);
 }
 
-int	roll_back_fd(int *saved_fd, int cmd_in, int cmd_out)
+int	roll_back_fd(int *saved_fd)
 { 
-	if (cmd_in != -1)
+	if (saved_fd[0] != -1)
 	{
 		if (dup2(saved_fd[0], STDIN_FILENO) == -1)
-		{
-			perror("dup2");
 			return (CMD_ROLLBACK_ERROR);
-		}
 	}
-	if (cmd_out != -1)
+	if (saved_fd[1] != -1)
 	{
 		if (dup2(saved_fd[1], STDOUT_FILENO) == -1)
-		{
-			perror("dup2");
 			return (CMD_ROLLBACK_ERROR);
-		}
 	}
 	return (0);
 }
-
-static void	close_fd(int *saved_fd, int cmd_in, int cmd_out)
+static void	close_fd(t_command *command, int *saved_fd)
 {
 	if (saved_fd[0] != -1)
 		close(saved_fd[0]);
 	if (saved_fd[1] != -1)
 		close(saved_fd[1]);
-	if (cmd_in != -1)
-		close(cmd_in);
-	if (cmd_out != -1)
-		close(cmd_out);
+	if (command->fd_in != -1)
+	{
+		close(command->fd_in);
+		command->fd_in = -1;
+	}
+	if (command->fd_out != -1)
+	{
+		close(command->fd_out);
+		command->fd_out = -1;
+	}
 }
 
-static int	handle_error(char *command, int *saved_fd, int cmd_in, int cmd_out)
+static int	handle_error(char *msg, t_command *command, int *saved_fd)
 {
 	int	status;
 
-	status = roll_back_fd(saved_fd, cmd_in, cmd_out);
-	close_fd(saved_fd, cmd_in, cmd_out);
+	status = roll_back_fd(saved_fd);
+	close_fd(command, saved_fd);
 	if (status == 0)
-		perror(command);
+		perror(msg);
 	if (status == CMD_ROLLBACK_ERROR)
 		return (CMD_ROLLBACK_ERROR);
 	return (CMD_DUP_ERROR);
@@ -82,29 +81,36 @@ static int	handle_error(char *command, int *saved_fd, int cmd_in, int cmd_out)
 int	execute_builtin(t_command *command, t_shell *shell, int type)
 {
 	int	status;
-	int saved_fd[2];
+	int	saved_fd[2];
 
 	saved_fd[0] = -1;
 	saved_fd[1] = -1;
 	saved_fd[0] = dup(STDIN_FILENO);
 	if (saved_fd[0] == -1)
-		return (handle_error("dup", saved_fd, -1, -1));
+	{
+		perror("dup");
+		return (CMD_DUP_ERROR);
+	}
 	saved_fd[1] = dup(STDOUT_FILENO);
 	if (saved_fd[1] == -1)
-		return (handle_error("dup", saved_fd, -1, -1));
+	{
+		close_fd(command, saved_fd);
+		perror("dup");
+		return (CMD_DUP_ERROR);
+	}
 	if (command->fd_in != -1)
 		if (dup2(command->fd_in, STDIN_FILENO) == -1)
-			return (handle_error("dup2", saved_fd, command->fd_in, -1));
+			return (handle_error("dup2", command, saved_fd));
 	if (command->fd_out != -1)
 		if (dup2(command->fd_out, STDOUT_FILENO) == -1)
-			return (handle_error("dup2", saved_fd, command->fd_in, command->fd_out));
+			return (handle_error("dup2", command, saved_fd));
 	status = call_cmd(command, shell, type);
-	if (roll_back_fd(saved_fd, command->fd_in, command->fd_out) == CMD_ROLLBACK_ERROR)
+	if (roll_back_fd(saved_fd) == CMD_ROLLBACK_ERROR)
 	{
-		close_fd(saved_fd, command->fd_in, command->fd_out);
+		close_fd(command, saved_fd);
 		return (CMD_ROLLBACK_ERROR);
 	}
-	close_fd(saved_fd, command->fd_in, command->fd_out);
+	close_fd(command, saved_fd);
 	if (status != CMD_SUCCESS)
 		return (status);
 	return (CMD_SUCCESS);
