@@ -64,7 +64,7 @@ int	build_commands(t_command **commands, t_shell *shell)
 	status = expander(shell, &token_arr);
 	if (status != CMD_SUCCESS)
 		return (handle_build_error(status, &token_arr, commands));
-	status = parser(token_arr, commands);
+	status = parser(shell, token_arr, commands);
 	if (status != CMD_SUCCESS)
 		return (handle_build_error(status, &token_arr, commands));
 	free_token_arr(token_arr);

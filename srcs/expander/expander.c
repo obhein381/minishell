@@ -12,6 +12,18 @@
 
 #include "minishell.h"
 
+int	is_valid_var_start(char	*str, int i)
+{
+		if (str[i] == '$' 
+			&& (str[i + 1] == '?'
+			|| ft_isalpha(str[i + 1])
+			|| str[i + 1] == '_'))
+		{
+			return (1);
+		}
+		return (0);
+}
+
 int	handling_quote(t_shell *shell, t_token *token_arr)
 {
 	int		i;
@@ -35,10 +47,7 @@ int	handling_quote(t_shell *shell, t_token *token_arr)
 				return (state);
 			continue ;
 		}
-		if (token_arr->value[i] == '$'
-		&& (token_arr->value[i + 1] == '?'
-			|| ft_isalpha(token_arr->value[i + 1])
-			|| token_arr->value[i + 1] == '_'))
+		if (is_valid_var_start(token_arr->value, i) == 1)
 		{
 			state = handling_cash(shell, &(token_arr->value), &i);
 			if (state != CMD_SUCCESS)

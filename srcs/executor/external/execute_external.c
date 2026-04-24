@@ -44,6 +44,29 @@ static int	print_signal_error(int status)
 	return (128 + WTERMSIG(status));
 }
 
+static int	apply_redirection(t_command *command)
+{
+	if (command->fd_in != -1)
+	{
+		if (dup2(command->fd_in, STDIN_FILENO) < 0)
+		{
+			close(command->fd_in);
+			return (-1);
+		}
+		close(command->fd_in);
+	}
+	if (command->fd_out != -1)
+	{
+		if (dup2(command->fd_out, STDOUT_FILENO) < 0)
+		{
+			close(command->fd_out);
+			return (-1);
+		}
+		close(command->fd_out);
+	}
+	return (0);
+}
+
 int	execute_external(t_command *commands, char **envp)
 {
 	char	*path;
@@ -58,6 +81,11 @@ int	execute_external(t_command *commands, char **envp)
 		return (handling_error("fork", path));
 	if (pid == 0)
 	{
+		if (apply_redirection(commands) < 0)
+		{
+			perror("dup2");
+			exit(get_error_code(errno));
+		}
 		if (execve(path, commands->argv, envp) == -1)
 		{
 			perror("execve");

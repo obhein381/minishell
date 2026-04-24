@@ -29,10 +29,7 @@ int	handling_dou_quote(t_shell *shell, char **word, int *i)
 	remove_quote(word, *i);
 	while ((*word)[*i] != '\0' && (*word)[*i] != '\"')
 	{
-		if ((*word)[*i] == '$' 
-		&& ((*word)[*i + 1] == '?' 
-		|| ft_isalpha((*word)[*i + 1]) 
-		|| (*word)[*i + 1] == '_'))
+		if (is_valid_var_start(*word, *i) == 1)
 		{
 			state = handling_cash(shell, word, i);
 			if (state != CMD_SUCCESS)

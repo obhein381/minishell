@@ -37,7 +37,7 @@ static void	handling_dup_error(void)
 	exit(1);
 }
 
-static	void	execute_redir(t_command *command, int *fd, int *prev_read)
+void	execute_redir(t_command *command, int *fd, int *prev_read)
 {
 	if (*prev_read != -1)
 		if (dup2(*prev_read, STDIN_FILENO) == -1)
