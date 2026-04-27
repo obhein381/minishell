@@ -81,20 +81,28 @@ int	execute_external(t_command *commands, char **envp)
 		return (handling_error("fork", path));
 	if (pid == 0)
 	{
+		set_signal_child();
 		if (apply_redirection(commands) < 0)
 		{
 			perror("dup2");
+			free(path);
 			exit(get_error_code(errno));
 		}
 		if (execve(path, commands->argv, envp) == -1)
 		{
+			free(path);
 			perror("execve");
 			exit(get_error_code(errno));
 		}
 	}
+	set_signal_parent_wait();
 	if (waitpid(pid, &status, 0) < 0)
+	{
+		set_signal_prompt();
 		return (handling_error("waitpid", path));
+	}
 	free(path);
+	set_signal_prompt();
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (print_signal_error(status));

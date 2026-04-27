@@ -104,6 +104,8 @@ typedef struct	s_shell
 void		print_commands(t_command *commands);
 void		print_token_arr(t_token *token_arr);
 
+void		set_signal_parent_wait(void);
+void		set_signal_child(void);
 void		set_signal_prompt(void);
 void		handler_signal_prompt(int sig);
 int			is_valid_var_start(char	*str, int i);

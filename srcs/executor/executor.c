@@ -66,6 +66,7 @@ int	executor(t_shell *shell)
 		status = execute_single_cmd(commands, shell);
 	else
 		status = execute_multi_cmd(shell);
+	shell->exit_status = status;
 	return (status);
 }
 
