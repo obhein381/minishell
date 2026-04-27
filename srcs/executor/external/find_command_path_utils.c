@@ -44,9 +44,9 @@ void	free_dirs(char **dirs)
 {
 	int i;
 
-	i = 0;
-	if (dirs[i] != NULL)
+	if (dirs == NULL)
 		return ;
+	i = 0;
 	while (dirs[i] != NULL)
 		free(dirs[i++]);
 	free(dirs);
