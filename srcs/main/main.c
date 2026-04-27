@@ -43,8 +43,6 @@ static void	handling_exit_error(t_shell *shell, char *command)
 	exit(1);
 }
 
-
-
 void	init_shell(t_shell *shell, char **envp)
 {
 	shell->commands = NULL;
@@ -91,6 +89,7 @@ int	main(int argc, char **argv, char **envp)
 	init_shell(&shell, envp);
 	while (1)
 	{
+		set_signal_prompt();
 		commands = NULL;
 		status = build_commands(&commands, &shell);
 		if (handle_main_status(status, &shell, &commands))

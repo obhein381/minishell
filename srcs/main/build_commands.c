@@ -44,6 +44,18 @@ static int	handle_build_error(int status, t_token **token_arr, t_command **comma
 	return (status);
 }
 
+static	int	handling_main_signal(t_shell *shell)
+{
+	if (shell->input != NULL)
+	{
+		free(shell->input);
+		shell->input = NULL;
+	}
+	shell->exit_status = 130;
+	g_signal = 0;
+	return (CMD_SIGNAL);
+}
+
 int	build_commands(t_command **commands, t_shell *shell)
 {
 	int		status;
@@ -51,6 +63,8 @@ int	build_commands(t_command **commands, t_shell *shell)
 
 	token_arr = NULL;
 	*commands = NULL;
+	if (g_signal == SIGINT)
+		return (handling_main_signal(shell));
 	shell->input = read_input();
 	if (shell->input == NULL)
 	{
@@ -59,6 +73,7 @@ int	build_commands(t_command **commands, t_shell *shell)
 	}
 	status = tokenization(shell->input, &token_arr);
 	free(shell->input);
+	shell->input = NULL;
 	if (status != CMD_SUCCESS)
 		return (handle_build_error(status, &token_arr, commands));
 	status = expander(shell, &token_arr);

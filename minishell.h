@@ -18,6 +18,8 @@
 # include <termcap.h>
 # include "srcs/libft/libft.h"
 
+extern volatile sig_atomic_t g_signal;
+
 typedef struct s_token
 {
     int		type;
@@ -97,10 +99,13 @@ typedef struct	s_shell
 # define CMD_DUP_ERROR 13
 # define CMD_ROLLBACK_ERROR 14
 # define CMD_QUOTE_ERROR 15
+# define CMD_SIGNAL 16
 
 void		print_commands(t_command *commands);
 void		print_token_arr(t_token *token_arr);
 
+void		set_signal_prompt(void);
+void		handler_signal_prompt(int sig);
 int			is_valid_var_start(char	*str, int i);
 int			expander(t_shell *shell, t_token **token_arr);
 int			handling_quote(t_shell *shell, t_token *token_arr);
