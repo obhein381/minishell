@@ -82,6 +82,7 @@ int	execute_multi_cmd(t_shell *shell)
 
 	prev_read = -1;
 	head = shell->commands;
+	set_signal_parent_wait();
 	while (head != NULL)
 	{
 		if (head->next != NULL)
@@ -102,6 +103,7 @@ int	execute_multi_cmd(t_shell *shell)
 		}
 		if (head->pid == 0)
 		{
+			set_signal_child();
 			execute_redir(head, fd, &prev_read);
 			exit(execute_child_cmd(head, shell));
 		}

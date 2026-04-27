@@ -14,11 +14,16 @@
 
 int convert_exit_status(int status)
 {
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	return (1);
+	int	sig;
+
+	if (!WIFSIGNALED(status))
+		return (1);
+	sig = WTERMSIG(status);
+	if (sig == SIGQUIT)
+		write(2, "Quit (core dumped)\n", 19);
+	else if (sig == SIGINT)
+		write(2, "\n", 1);
+	return (128 + WTERMSIG(status));
 }
 
 int	execute_external_child(t_shell *shell, t_command *command)
@@ -52,6 +57,7 @@ int	wait_all_child(t_command *commands)
 		}
 		commands = commands->next;
 	}
+	set_signal_prompt();
 	return (convert_exit_status(status));
 }
 
