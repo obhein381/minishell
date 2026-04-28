@@ -12,18 +12,22 @@
 
 #include "minishell.h"
 
-int convert_exit_status(int status)
+int	convert_exit_status(int status)
 {
 	int	sig;
-
-	if (!WIFSIGNALED(status))
-		return (1);
-	sig = WTERMSIG(status);
-	if (sig == SIGQUIT)
-		write(2, "Quit (core dumped)\n", 19);
-	else if (sig == SIGINT)
-		write(2, "\n", 1);
-	return (128 + WTERMSIG(status));
+	
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status))
+	{
+		sig = WTERMSIG(status);
+		if (sig == SIGQUIT)
+			write(2, "Quit (core dumped)\n", 19);
+		else if (sig == SIGINT)
+			write(2, "\n", 1);
+		return (128 + sig);
+	}
+	return (1);
 }
 
 int	execute_external_child(t_shell *shell, t_command *command)
