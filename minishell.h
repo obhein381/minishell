@@ -129,6 +129,7 @@ int			tokenization(char *input, t_token **token_arr);
 t_command	*add_back_command(t_command **commands, t_command *new);
 t_command	*new_command(int token_count);
 t_command	*free_command_arr(t_command *head);
+int			fd_heredoc(t_shell *shell, t_token *file_token, int *fd);
 int			parser_redir(t_shell *shell, t_command **commands, t_parser_state *state);
 int			parser_pipe(t_command **commands, t_command **cur, int token_count);
 int			parser_word(t_command **commands, t_parser_state state);

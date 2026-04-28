@@ -11,71 +11,25 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stdio.h>
 
-int	fd_heredoc(t_shell *shell, t_token *file_token)
+int	get_redir_fd(t_shell *shell, t_token *file_token, int type, int *fd)
 {
-	char	*eof;
-	int		pipe_fd[2];
-	char	*line;
-	int		i;
+	int	status;
 
-	eof = file_token->value;
-	if (pipe(pipe_fd) == -1)
-		return (perror("pipe"), -1);
-	while (1)
-	{
-		line = readline("heredoc> ");
-		if (line == NULL)
-			break ;
-		if (ft_strncmp(line, eof, ft_strlen(eof) + 1) == 0)
-		{
-			free(line);
-			break ;
-		}
-		i = 0;
-		while (line[i] != '\0')
-		{
-			if (is_valid_var_start(line, i) == 1)
-			{
-				handling_cash(shell, &line, &i);
-				if (line == NULL)
-				{
-					close(pipe_fd[1]);
-					close(pipe_fd[0]);
-					return (HEREDOC_MALLOC_ERROR);
-				}
-			}
-			else
-				i++;
-		}
-		write(pipe_fd[1], line, ft_strlen(line));
-		write(pipe_fd[1], "\n", 1);
-		free(line);
-	}
-	close(pipe_fd[1]);
-	return (pipe_fd[0]);
-}
-
-int	get_redir_fd(t_shell *shell, t_token *file_token, int type)
-{
-	int	fd;
-
+	status = CMD_SUCCESS;
 	if (type == TOKEN_REDIR_IN)
-		fd = open(file_token->value, O_RDONLY);
+		*fd = open(file_token->value, O_RDONLY);
 	else if (type == TOKEN_REDIR_OUT)
-		fd = open(file_token->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		*fd = open(file_token->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (type == TOKEN_APPEND)
-		fd = open(file_token->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		*fd = open(file_token->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
-		return (fd_heredoc(shell, file_token));
-	if (fd < 0)
-	{
-		if (fd == HEREDOC_MALLOC_ERROR)
-			return (HEREDOC_MALLOC_ERROR);
+		status = fd_heredoc(shell, file_token, fd);
+	if (status != CMD_SUCCESS)
+		return (status);
+	if (*fd < 0)
 		return (perror(file_token->value), -1);
-	}
-	return (fd);
+	return (CMD_SUCCESS);
 }
 
 void apply_redirection(t_command **commands, int type, int fd)
@@ -98,17 +52,19 @@ void apply_redirection(t_command **commands, int type, int fd)
 int	parser_redir(t_shell *shell, t_command **commands, t_parser_state *state)
 {
 	int	fd;
+	int	status;
 	t_token	*file_token;
 
 	file_token = state->cur->next;
 	if (file_token == NULL || file_token->type != TOKEN_WORD)
 		return (REDIR_ERROR);
-	fd = get_redir_fd(shell, file_token, state->cur->type);
-	if (fd == HEREDOC_MALLOC_ERROR)
-		return (HEREDOC_MALLOC_ERROR);
-	if (fd < 0)
-		return (FD_ERROR);
+	status = get_redir_fd(shell, file_token, state->cur->type, &fd);
+	if (status != CMD_SUCCESS)
+	{
+		shell->exit_status = status;
+		return (status);
+	}
 	apply_redirection(commands, state->cur->type, fd);
 	state->cur = file_token;
-	return (0);
+	return (CMD_SUCCESS);
 }

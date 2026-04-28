@@ -36,16 +36,16 @@ static void	set_parser_env(t_command **commands, t_command **cur, t_parser_state
 
 static int	parse_token(t_shell *shell, t_command **commands, t_command **cur, t_parser_state *state)
 {
-	int	check_error;
+	int	status;
 
-	check_error = 0;
+	status = CMD_SUCCESS;
 	if (state->cur->type == TOKEN_PIPE)
-		check_error = parser_pipe(commands, cur, state->token_count);
+		status = parser_pipe(commands, cur, state->token_count);
 	else if (state->cur->type == TOKEN_WORD)
-		check_error = parser_word(cur, *state);
+		status = parser_word(cur, *state);
 	else
-		check_error = parser_redir(shell, cur, state);
-	return (check_error);
+		status = parser_redir(shell, cur, state);
+	return (status);
 }
 
 int parser(t_shell *shell, t_token	*token_arr, t_command **commands)
@@ -63,7 +63,7 @@ int parser(t_shell *shell, t_token	*token_arr, t_command **commands)
 	while (state.cur != NULL)
 	{
 		check_error = parse_token(shell, commands, &cur, &state);
-		if (check_error != 0)
+		if (check_error != CMD_SUCCESS)
 			return (check_error);
 		state.prev = state.cur;
 		state.cur = state.cur->next;
