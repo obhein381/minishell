@@ -12,6 +12,17 @@
 
 #include "minishell.h"
 
+static void	remove_newline(char *input)
+{
+	int	len;
+
+	if (input == NULL)
+		return ;
+	len = ft_strlen(input);
+	if (len > 0 && input[len - 1] == '\n')
+		input[len - 1] = '\0';
+}
+
 static char	*read_input(void)
 {
 	char	*input;
@@ -25,7 +36,10 @@ static char	*read_input(void)
 			add_history(input);
 	}
 	else
-		input = readline(NULL);
+	{
+		input = get_next_line(STDIN_FILENO);
+		remove_newline(input);
+	}
 	return (input);
 }
 
@@ -68,7 +82,8 @@ int	build_commands(t_command **commands, t_shell *shell)
 	shell->input = read_input();
 	if (shell->input == NULL)
 	{
-		write(1, "exit\n", 5);
+		if (isatty(STDIN_FILENO))
+			write(1, "exit\n", 5);
 		return (CMD_EOF);
 	}
 	status = tokenization(shell->input, &token_arr);

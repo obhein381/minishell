@@ -5,6 +5,7 @@ NAME = minishell
 
 SRCS = srcs/debug/debug_token.c srcs/debug/debug_commands.c \
 		srcs/main/build_commands.c srcs/main/dup_envp.c \
+		srcs/main/get_next_line.c srcs/main/get_next_line_utils.c \
 		srcs/main/main.c \
 		srcs/main/handling_signal.c \
 		srcs/expander/handling_sig_quote.c \

@@ -1,6 +1,11 @@
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
+
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdio.h>
@@ -104,6 +109,12 @@ typedef struct	s_shell
 void		print_commands(t_command *commands);
 void		print_token_arr(t_token *token_arr);
 
+ssize_t		ft_origin(char **origin, char **backup, ssize_t len);
+char		*ft_gnl_print(char **backup, ssize_t i, ssize_t len, char *result);
+char		*ft_gnl_clear(char **backup, char **sub);
+char		*ft_gnl_strjoin(char **s, char *s1, char *s2);
+ssize_t		ft_gnl_strlen(char *s, int ver);
+char		*get_next_line(int fd);
 void		set_signal_parent_wait(void);
 void		set_signal_child(void);
 void		set_signal_prompt(void);
