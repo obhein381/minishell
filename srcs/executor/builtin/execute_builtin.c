@@ -23,8 +23,9 @@ static int	call_cmd(t_command *command, t_shell *shell,  int type)
 		status = execute_env(shell);
 	if (type == COMMAND_EXPORT)
 		status = execute_export(command, shell);
-	/*if (type == COMMAND_CD)
-	if (type == COMMAND_PWD)
+	if (type == COMMAND_CD)
+		status = execute_cd(command, shell);
+	/*if (type == COMMAND_PWD)
 	if (type == COMMAND_EXPORT)
 	if (type == COMMAND_UNSET)
 	if (type == COMMAND_ENV)
