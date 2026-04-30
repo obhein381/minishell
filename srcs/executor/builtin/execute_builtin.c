@@ -27,9 +27,9 @@ static int	call_cmd(t_command *command, t_shell *shell,  int type)
 		status = execute_cd(command, shell);
 	if (type == COMMAND_UNSET)
 		status = execute_unset(command, shell);
-	/*if (type == COMMAND_PWD)
-	if (type == COMMAND_UNSET)
-	if (type == COMMAND_EXIT))*/
+	if (type == COMMAND_PWD)
+		status = execute_pwd();
+	//if (type == COMMAND_EXIT))
 	return (status);
 }
 
