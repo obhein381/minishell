@@ -68,7 +68,7 @@ int	execute_cd(t_command *command, t_shell *shell)
 	if (command->argv[1] == NULL)
 	{
 		home_index = find_envp_index(shell, "HOME");
-		if (home_index == -1)
+		if (home_index == -1 || shell->envp[home_index][4] != '=')
 		{
 			write(2, "cd: HOME not set\n", 17);
 			return (1);
