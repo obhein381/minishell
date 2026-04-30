@@ -9,7 +9,7 @@ SRCS = srcs/debug/debug_token.c srcs/debug/debug_commands.c \
 		srcs/main/main.c \
 		srcs/main/handling_signal.c \
 		srcs/expander/handling_sig_quote.c \
-		srcs/expander/handling_cash.c srcs/expander/handling_cash_opt.c\
+		srcs/expander/handling_cash.c srcs/expander/handling_cash_opt.c \
 		srcs/expander/handling_dou_quote.c \
 		srcs/expander/expander.c \
 		srcs/lexer/tokenization.c srcs/lexer/tokenization_opt.c \
@@ -21,6 +21,7 @@ SRCS = srcs/debug/debug_token.c srcs/debug/debug_commands.c \
 		srcs/executor/external/find_command_path.c srcs/executor/external/find_command_path_utils.c \
 		srcs/executor/external/execute_external.c \
 		srcs/executor/builtin/execute_builtin.c \
+		srcs/executor/builtin/execute_unset.c \
 		srcs/executor/builtin/execute_cd.c srcs/executor/builtin/execute_cd_opt.c \
 		srcs/executor/builtin/execute_echo.c  srcs/executor/builtin/execute_env.c \
 		srcs/executor/builtin/execute_export.c srcs/executor/builtin/execute_export_opt.c \

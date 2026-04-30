@@ -25,12 +25,11 @@ static int	call_cmd(t_command *command, t_shell *shell,  int type)
 		status = execute_export(command, shell);
 	if (type == COMMAND_CD)
 		status = execute_cd(command, shell);
-	/*if (type == COMMAND_PWD)
-	if (type == COMMAND_EXPORT)
 	if (type == COMMAND_UNSET)
-	if (type == COMMAND_ENV)
-	if (type == COMMAND_EXIT)
-	if (type == COMMAND_MIN_N)*/
+		status = execute_unset(command, shell);
+	/*if (type == COMMAND_PWD)
+	if (type == COMMAND_UNSET)
+	if (type == COMMAND_EXIT))*/
 	return (status);
 }
 

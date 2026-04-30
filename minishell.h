@@ -163,6 +163,7 @@ int			find_key_envp(char **envp, char *key, int key_index);
 int			find_envp_index(t_shell *shell, char *target);
 int			add_target_env(t_shell *shell, char *result);
 int			update_env(t_shell *shell, char *target, char *value);
+int			execute_unset(t_command *command, t_shell *shell);
 int			execute_cd(t_command *command, t_shell *shell);
 int			execute_export(t_command *command, t_shell *shell);
 int			execute_builtin(t_command *command, t_shell *shell, int type);
