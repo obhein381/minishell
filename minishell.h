@@ -54,6 +54,7 @@ typedef struct	s_shell
 	char		*input;
 	char		**envp;
 	int			exit_status;
+	int			shut_down;
 	t_command	*commands;
 }	t_shell;
 
@@ -105,6 +106,7 @@ typedef struct	s_shell
 # define CMD_ROLLBACK_ERROR 14
 # define CMD_QUOTE_ERROR 15
 # define CMD_SIGNAL 16
+# define CMD_STDERROR 17
 
 void		print_commands(t_command *commands);
 void		print_token_arr(t_token *token_arr);
@@ -175,6 +177,7 @@ int			convert_exit_status(int status);
 int			execute_external_child(t_shell *shell, t_command *command);
 int			wait_all_child(t_command *commands);
 void		close_all_fd(int *fd);
+int			execute_exit(t_command *command, t_shell *shell);
 
 #endif
 /*

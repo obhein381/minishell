@@ -46,6 +46,7 @@ static void	handling_exit_error(t_shell *shell, char *command)
 void	init_shell(t_shell *shell, char **envp)
 {
 	shell->commands = NULL;
+	shell->shut_down = 0;
 	shell->envp = NULL;
 	shell->input = NULL;
 	shell->envp = dup_envp(envp);
@@ -96,6 +97,11 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		shell.commands = commands;
 		status = executor(&shell);
+		if (shell.shut_down == 1)
+		{
+			free_shell(&shell);
+			return (status);
+		}
 		if (handle_main_status(status, &shell, &commands))
 			continue ;
 		free_command_arr(commands);

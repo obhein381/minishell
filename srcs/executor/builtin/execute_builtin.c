@@ -29,7 +29,8 @@ static int	call_cmd(t_command *command, t_shell *shell,  int type)
 		status = execute_unset(command, shell);
 	if (type == COMMAND_PWD)
 		status = execute_pwd();
-	//if (type == COMMAND_EXIT))
+	if (type == COMMAND_EXIT)
+		status = execute_exit(command, shell);
 	return (status);
 }
 
@@ -47,6 +48,7 @@ int	roll_back_fd(int *saved_fd)
 	}
 	return (0);
 }
+
 static void	close_fd(t_command *command, int *saved_fd)
 {
 	if (saved_fd[0] != -1)

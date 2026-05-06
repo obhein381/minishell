@@ -21,6 +21,7 @@ SRCS = srcs/debug/debug_token.c srcs/debug/debug_commands.c \
 		srcs/executor/external/find_command_path.c srcs/executor/external/find_command_path_utils.c \
 		srcs/executor/external/execute_external.c \
 		srcs/executor/builtin/execute_builtin.c \
+		srcs/executor/builtin/execute_exit.c \
 		srcs/executor/builtin/execute_pwd.c srcs/executor/builtin/execute_unset.c \
 		srcs/executor/builtin/execute_cd.c srcs/executor/builtin/execute_cd_opt.c \
 		srcs/executor/builtin/execute_echo.c  srcs/executor/builtin/execute_env.c \
