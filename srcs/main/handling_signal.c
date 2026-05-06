@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-volatile sig_atomic_t g_signal = 0;
-
 void	handler_signal_prompt(int sig)
 {
 	g_signal = sig;

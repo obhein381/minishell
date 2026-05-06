@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+volatile sig_atomic_t g_signal = 0;
+
 void	free_shell(t_shell *shell)
 {
 	int		i;
@@ -50,7 +52,6 @@ void	init_shell(t_shell *shell, char **envp)
 	shell->envp = NULL;
 	shell->input = NULL;
 	shell->envp = dup_envp(envp);
-	shell->exit_status = CMD_SUCCESS;
 	if (shell->envp == NULL)
 	{
 		handling_exit_error(shell, "malloc error\n");
@@ -87,6 +88,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argv;
 	(void)argc;
+	shell.exit_status = CMD_SUCCESS;
 	init_shell(&shell, envp);
 	while (1)
 	{

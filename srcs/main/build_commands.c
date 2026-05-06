@@ -77,7 +77,7 @@ int	build_commands(t_command **commands, t_shell *shell)
 
 	token_arr = NULL;
 	*commands = NULL;
-	if (g_signal == SIGINT)
+	if (g_signal != 0)
 		return (handling_main_signal(shell));
 	shell->input = read_input();
 	if (shell->input == NULL)
@@ -85,6 +85,12 @@ int	build_commands(t_command **commands, t_shell *shell)
 		if (isatty(STDIN_FILENO))
 			write(1, "exit\n", 5);
 		return (CMD_EOF);
+	}
+	if (shell->input[0] == '\0')
+	{
+		free(shell->input);
+		shell->input = NULL;
+		return (NO_COMMAND);
 	}
 	status = tokenization(shell->input, &token_arr);
 	free(shell->input);

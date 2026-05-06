@@ -64,6 +64,11 @@ int	expander(t_shell *shell, t_token **token_arr)
 	int		state;
 	t_token	*head;
 
+	if (g_signal == SIGINT)
+	{
+		shell->exit_status = 130;
+		g_signal = 0;
+	}
 	state = 0;
 	head = *token_arr;
 	(void)shell;
