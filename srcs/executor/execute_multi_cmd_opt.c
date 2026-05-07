@@ -37,9 +37,17 @@ int	execute_external_child(t_shell *shell, t_command *command)
 	int			status;
 
 	envp = shell->envp;
-	 status = find_command_path(command->argv[0], envp, &path);
+	status = find_command_path(command->argv[0], envp, &path);
 	 if (status != CMD_SUCCESS)
+	 {
+		if (status == CMD_NOT_FOUND)
+		{
+			ft_putstr_fd(command->argv[0], 2);
+			ft_putstr_fd(": command not found\n", 2);
+			exit(127);
+		}
 	 	exit(status);
+	 }
 	execve(path, command->argv, envp);
 	perror("execve");
 	exit(1);

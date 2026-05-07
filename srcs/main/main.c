@@ -67,7 +67,7 @@ int	handle_main_status(int status, t_shell *shell, t_command **commands)
 	if (status == CMD_EOF)
 	{
 		free_shell(shell);
-		exit(0);
+		exit(shell->exit_status);
 	}
 	if (status != CMD_SUCCESS)
 	{
@@ -109,7 +109,7 @@ int	main(int argc, char **argv, char **envp)
 		free_command_arr(commands);
 		shell.commands = NULL;
 	}
-	return (0);
+	return (shell.exit_status);
 }
 
 

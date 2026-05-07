@@ -48,6 +48,12 @@ int	execute_single_cmd(t_command *command, t_shell *shell)
 		status = execute_external(command, shell->envp);
 	else
 		status = execute_builtin(command, shell, builtin_type);
+	if (status == CMD_NOT_FOUND)
+	{
+		ft_putstr_fd(command->argv[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
+		return (127);
+	}
 	return (status);
 }
 
