@@ -70,17 +70,20 @@ int	heredoc_child(t_shell *shell, t_token *file_token, int *pipe_fd)
 			free(line);
 			break ;
 		}
-		i = 0;
-		while (line[i] != '\0')
+		if (file_token->heredoc_quote == 0)
 		{
-			if (is_valid_var_start(line, i) == 1)
+			i = 0;
+			while (line[i] != '\0')
 			{
-				handling_cash(shell, &line, &i);
-				if (line == NULL)
-					return (HEREDOC_MALLOC_ERROR);
+				if (is_valid_var_start(line, i) == 1)
+				{
+					handling_cash(shell, &line, &i);
+					if (line == NULL)
+						return (HEREDOC_MALLOC_ERROR);
+				}
+				else
+					i++;
 			}
-			else
-				i++;
 		}
 		write(pipe_fd[1], line, ft_strlen(line));
 		write(pipe_fd[1], "\n", 1);

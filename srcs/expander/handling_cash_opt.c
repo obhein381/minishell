@@ -70,3 +70,22 @@ int	handle_cash_free(int state, char *f_str, char *s_str, char *env_var)
 	return (state);
 }
 
+void	removal_quote_only(t_token *token_arr)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (token_arr->value[i] != '\0')
+	{
+		if (token_arr->value[i] != '\'' && token_arr->value[i] != '\"')
+		{
+			token_arr->value[j] = token_arr->value[i];
+			j++;
+		}
+		i++;
+	}
+	token_arr->value[j] = '\0';
+}
+

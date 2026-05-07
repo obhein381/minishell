@@ -24,6 +24,20 @@ int	is_valid_var_start(char	*str, int i)
 		return (0);
 }
 
+int	has_quote(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == '\'' || str[i] == '\"')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int	handling_quote(t_shell *shell, t_token *token_arr)
 {
 	int		i;
@@ -71,9 +85,18 @@ int	expander(t_shell *shell, t_token **token_arr)
 	}
 	state = 0;
 	head = *token_arr;
-	(void)shell;
 	while (head != NULL)
 	{
+		if (head->type == TOKEN_HEREDOC)
+		{
+			if (head->next != NULL && head->next->type == TOKEN_WORD)
+			{
+				head->next->heredoc_quote = has_quote(head->next->value);
+				removal_quote_only(head->next);
+				head = head->next->next;
+				continue ;
+			}
+		}
 		if (head->type == TOKEN_WORD)
 		{
 			state = handling_quote(shell, head);

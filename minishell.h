@@ -27,6 +27,7 @@ extern volatile sig_atomic_t g_signal;
 
 typedef struct s_token
 {
+	int		heredoc_quote;
     int		type;
     char	*value;
 	struct	s_token *next;
@@ -111,6 +112,7 @@ typedef struct	s_shell
 void		print_commands(t_command *commands);
 void		print_token_arr(t_token *token_arr);
 
+void		removal_quote_only(t_token *token_arr);
 ssize_t		ft_origin(char **origin, char **backup, ssize_t len);
 char		*ft_gnl_print(char **backup, ssize_t i, ssize_t len, char *result);
 char		*ft_gnl_clear(char **backup, char **sub);
