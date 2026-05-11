@@ -112,6 +112,10 @@ typedef struct	s_shell
 void		print_commands(t_command *commands);
 void		print_token_arr(t_token *token_arr);
 
+int			handle_heredoc_status(int status, int read_fd, int *fd);
+int			read_heredoc_to_pipe(t_shell *shell, t_token *file_token, int *pipe_fd);
+char		*read_heredoc_line(void);
+void		remove_newline(char *input);
 void		removal_quote_only(t_token *token_arr);
 ssize_t		ft_origin(char **origin, char **backup, ssize_t len);
 char		*ft_gnl_print(char **backup, ssize_t i, ssize_t len, char *result);

@@ -17,14 +17,17 @@ int	find_command_path(char *command, char **envp, char **path)
 	int		path_index;
 	char	**dirs;
 	int		status;
+	char	*path_value;
 
 	*path = NULL;
 	if (ft_strchr(command, '/'))
 		return (handle_slash_command(command, path));
 	path_index = get_path_index(envp);
 	if (path_index == -1)
-		return (CMD_NOT_FOUND);
-	dirs = make_dirs(command, &envp[path_index][5]);
+		path_value = "/usr/local/bin:/usr/bin:/bin";
+	else
+		path_value = &envp[path_index][5];
+	dirs = make_dirs(command, path_value);
 	if (dirs == NULL)
 		return (CMD_MALLOC_ERROR);
 	status = find_cmd_input_path(dirs, path);

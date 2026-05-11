@@ -23,76 +23,7 @@ static int	handling_error(char *command, int err)
 		return (1);
 }
 
-static int	handle_heredoc_status(int status, int read_fd, int *fd)
-{
-	int	exit_code;
-	int	sig;
-
-	if (WIFEXITED(status))
-	{
-		exit_code = WEXITSTATUS(status);
-		if (exit_code != CMD_SUCCESS)
-		{
-			close(read_fd);
-			return (exit_code);
-		}
-		*fd = read_fd;
-		return (CMD_SUCCESS);
-	}
-	if (WIFSIGNALED(status))
-	{
-		sig = WTERMSIG(status);
-		close(read_fd);
-		if (sig == SIGQUIT)
-			write(2, "Quit (core dumped)\n", 19);
-		else if (sig == SIGINT)
-			write(2, "\n", 1);
-		return (128 + sig);
-	}
-	close(read_fd);
-	return (1);
-}
-
-int	heredoc_child(t_shell *shell, t_token *file_token, int *pipe_fd)
-{
-	char	*eof;
-	char	*line;
-	int		i;
-
-	eof = file_token->value;
-	while (1)
-	{
-		line = readline("heredoc> ");
-		if (line == NULL)
-			break ;
-		if (ft_strncmp(line, eof, ft_strlen(eof) + 1) == 0)
-		{
-			free(line);
-			break ;
-		}
-		if (file_token->heredoc_quote == 0)
-		{
-			i = 0;
-			while (line[i] != '\0')
-			{
-				if (is_valid_var_start(line, i) == 1)
-				{
-					handling_cash(shell, &line, &i);
-					if (line == NULL)
-						return (HEREDOC_MALLOC_ERROR);
-				}
-				else
-					i++;
-			}
-		}
-		write(pipe_fd[1], line, ft_strlen(line));
-		write(pipe_fd[1], "\n", 1);
-		free(line);
-	}
-	return (CMD_SUCCESS);
-}
-
-int	fd_heredoc(t_shell *shell, t_token *file_token, int *fd)
+static int	fd_heredoc_child(t_shell *shell, t_token *file_token, int *fd)
 {
 	int		pipe_fd[2];
 	pid_t	pid;
@@ -112,7 +43,7 @@ int	fd_heredoc(t_shell *shell, t_token *file_token, int *fd)
 	{
 		set_signal_child();
 		close(pipe_fd[0]);
-		exit_code = heredoc_child(shell, file_token, pipe_fd);
+		exit_code = read_heredoc_to_pipe(shell, file_token, pipe_fd);
 		close(pipe_fd[1]);
 		exit(exit_code);
 	}
@@ -126,4 +57,29 @@ int	fd_heredoc(t_shell *shell, t_token *file_token, int *fd)
 	}
 	set_signal_prompt();
 	return (handle_heredoc_status(status, pipe_fd[0], fd));
+}
+
+static int	fd_heredoc_parent(t_shell *shell, t_token *file_token, int *fd)
+{
+	int	pipe_fd[2];
+	int	status;
+
+	if (pipe(pipe_fd) == -1)
+		return (handling_error("pipe", errno));
+	status = read_heredoc_to_pipe(shell, file_token, pipe_fd);
+	close(pipe_fd[1]);
+	if (status != CMD_SUCCESS)
+	{
+		close(pipe_fd[0]);
+		return (status);
+	}
+	*fd = pipe_fd[0];
+	return (CMD_SUCCESS);
+}
+
+int	fd_heredoc(t_shell *shell, t_token *file_token, int *fd)
+{
+	if (isatty(STDIN_FILENO))
+		return (fd_heredoc_child(shell, file_token, fd));
+	return (fd_heredoc_parent(shell, file_token, fd));
 }

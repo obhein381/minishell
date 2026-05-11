@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static void	remove_newline(char *input)
+void	remove_newline(char *input)
 {
 	int	len;
 
