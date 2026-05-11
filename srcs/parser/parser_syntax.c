@@ -14,6 +14,14 @@
 
 int			check_pipe_syntax(t_command *head)
 {
+	if (head != NULL
+		&& head->next == NULL
+		&& head->argv[0] == NULL
+		&& head->fd_in == -1
+		&& head->fd_out == -1)
+	{
+		return (NO_COMMAND);
+	}
 	while (head != NULL)
 	{
 		if (head->argv[0] == NULL && head->fd_in == -1 && head->fd_out == -1)

@@ -46,6 +46,8 @@ static int	add_split_words(t_command **commands, char *value)
 
 int	parser_word(t_command **commands, t_parser_state state)
 {
+	if (state.cur->word_split == 1 && state.cur->value[0] == '\0')
+		return (CMD_SUCCESS);
 	if (state.cur->word_split == 1)
 		return (add_split_words(commands, state.cur->value));
 	return (add_word(commands, state.cur->value));
