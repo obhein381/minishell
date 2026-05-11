@@ -66,6 +66,11 @@ static int	execute_child_cmd(t_command *command, t_shell *shell)
 	int	builtin_type;
 	int	status;
 
+	if (is_empty_command(command))
+	{
+		ft_putstr_fd(": command not found\n", 2);
+		return(127);
+	}
 	builtin_type = get_builtin_type(command);
 	if (builtin_type == UNKNOWN_COMMAND)
 		status = execute_external_child(shell, command);

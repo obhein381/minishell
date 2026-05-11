@@ -38,11 +38,23 @@ int	get_builtin_type(t_command *commands)
 	return (type);
 }
 
+int	is_empty_command(t_command *cmd)
+{
+	return (cmd->argv != NULL
+		&& cmd->argv[0] != NULL
+		&& cmd->argv[0][0] == '\0');
+}
+
 int	execute_single_cmd(t_command *command, t_shell *shell)
 {
 	int	builtin_type;
 	int	status;
 
+	if (is_empty_command(command))
+	{
+		ft_putstr_fd(": command not found\n", 2);
+		return(127);
+	}
 	builtin_type = get_builtin_type(command);
 	if (builtin_type == UNKNOWN_COMMAND)
 		status = execute_external(command, shell->envp);
