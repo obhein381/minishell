@@ -28,7 +28,7 @@ int	get_redir_fd(t_shell *shell, t_token *file_token, int type, int *fd)
 	if (status != CMD_SUCCESS)
 		return (status);
 	if (*fd < 0)
-		return (perror(file_token->value), -1);
+		return (perror(file_token->value), 1);
 	return (CMD_SUCCESS);
 }
 
