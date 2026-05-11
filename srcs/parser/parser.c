@@ -12,6 +12,27 @@
 
 #include "minishell.h"
 
+static int	count_words(char *str)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str[i] != '\0')
+	{
+		while (str[i] == ' ')
+			i++;
+		if (str[i] != '\0')
+		{
+			count++;
+			while (str[i] != '\0' && str[i] != ' ')
+				i++;
+		}
+	}
+	return (count);
+}
+
 static int	count_token(t_token *head)
 {
 	int	count;
@@ -19,7 +40,10 @@ static int	count_token(t_token *head)
 	count = 0;
 	while (head != NULL)
 	{
-		count++;
+		if (head->type == TOKEN_WORD && head->word_split == 1)
+			count += count_words(head->value);
+		else
+			count++;
 		head = head->next;
 	}
 	return (count);

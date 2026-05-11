@@ -27,6 +27,7 @@ extern volatile sig_atomic_t g_signal;
 
 typedef struct s_token
 {
+	int		word_split;
 	int		heredoc_quote;
     int		type;
     char	*value;

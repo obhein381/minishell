@@ -31,6 +31,7 @@ t_token	*new_token(char *input, int len, int type)
 	while(++i < len)
 		value[i] = input[i];
 	value[i] = '\0';
+	new->word_split = 0;
 	new->heredoc_quote = 0;
 	new->value = value;
 	new->next = NULL;

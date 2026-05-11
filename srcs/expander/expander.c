@@ -12,6 +12,28 @@
 
 #include "minishell.h"
 
+int	is_only_var_token(char *str, int i)
+{
+	int	j;
+
+	if (i != 0)
+		return (0);
+	if (str[i] != '$')
+		return (0);
+	if (str[i + 1] == '?')
+		return (str[i + 2] == '\0');
+	if (ft_isalpha(str[i + 1]) != 1 && str[i + 1] != '_')
+		return (0);
+	j = i + 2;
+	while (str[j] != '\0')
+	{
+		if (ft_isalnum(str[j]) != 1 && str[j] != '_')
+			return (0);
+		j++;
+	}
+	return (1);
+}
+
 int	is_valid_var_start(char	*str, int i)
 {
 		if (str[i] == '$' 
@@ -63,6 +85,8 @@ int	handling_quote(t_shell *shell, t_token *token_arr)
 		}
 		if (is_valid_var_start(token_arr->value, i) == 1)
 		{
+			if (is_only_var_token(token_arr->value, i) == 1)
+				token_arr->word_split = 1;
 			state = handling_cash(shell, &(token_arr->value), &i);
 			if (state != CMD_SUCCESS)
 				return (state);
