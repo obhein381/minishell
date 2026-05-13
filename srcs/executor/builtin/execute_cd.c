@@ -65,7 +65,7 @@ int	execute_cd(t_command *command, t_shell *shell)
 
 	if (command->argv[1] != NULL && command->argv[2] != NULL)
 		return (cd_arg_error());
-	if (command->argv[1] == NULL)
+	if (command->argv[1] == NULL || ft_strncmp(command->argv[1], "--", 2) == 0)
 	{
 		home_index = find_envp_index(shell, "HOME");
 		if (home_index == -1 || shell->envp[home_index][4] != '=')
