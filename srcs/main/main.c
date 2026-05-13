@@ -60,6 +60,8 @@ void	init_shell(t_shell *shell, char **envp)
 
 int	handle_main_status(int status, t_shell *shell, t_command **commands)
 {
+	if (status == PIPE_ERROR || status == REDIR_ERROR)
+		shell->exit_status = 2;
 	if (status == CMD_MALLOC_ERROR || status == HEREDOC_MALLOC_ERROR)
 		handling_exit_error(shell, "malloc error\n");
 	if (status == CMD_ROLLBACK_ERROR)
