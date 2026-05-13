@@ -113,6 +113,10 @@ typedef struct	s_shell
 void		print_commands(t_command *commands);
 void		print_token_arr(t_token *token_arr);
 
+int			execute_builtin_child(t_command *command, t_shell *shell, int type);
+int			roll_back_fd(int *saved_fd);
+void		close_fd(t_command *command, int *saved_fd);
+int			call_cmd(t_command *command, t_shell *shell,  int type);
 int			is_empty_command(t_command *cmd);
 int			handle_heredoc_status(int status, int read_fd, int *fd);
 int			read_heredoc_to_pipe(t_shell *shell, t_token *file_token, int *pipe_fd);

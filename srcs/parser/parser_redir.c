@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdio.h>
 
 int	get_redir_fd(t_shell *shell, t_token *file_token, int type, int *fd)
 {
