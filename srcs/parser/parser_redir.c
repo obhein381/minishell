@@ -29,7 +29,10 @@ int	get_redir_fd(t_shell *shell, t_token *file_token, int type, int *fd)
 	if (status != CMD_SUCCESS)
 		return (status);
 	if (*fd < 0)
-		return (perror(file_token->value), 1);
+	{
+		perror(file_token->value);
+		return (FD_OPEN_EORROR);
+	}
 	return (CMD_SUCCESS);
 }
 
@@ -62,8 +65,9 @@ int	parser_redir(t_shell *shell, t_command **commands, t_parser_state *state)
 	status = get_redir_fd(shell, file_token, state->cur->type, &fd);
 	if (status != CMD_SUCCESS)
 	{
-		shell->exit_status = status;
-		return (status);
+		(*commands)->redir_error = 1;
+		shell->exit_status = 1;
+		return (CMD_SUCCESS);
 	}
 	apply_redirection(commands, state->cur->type, fd);
 	state->cur = file_token;

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdio.h>
 
 int	get_builtin_type(t_command *commands)
 {
@@ -55,6 +56,8 @@ int	execute_single_cmd(t_command *command, t_shell *shell)
 		ft_putstr_fd(": command not found\n", 2);
 		return(127);
 	}
+	if (command->redir_error == 1)
+		return (FD_OPEN_EORROR);
 	builtin_type = get_builtin_type(command);
 	if (builtin_type == UNKNOWN_COMMAND)
 		status = execute_external(command, shell->envp);
@@ -85,6 +88,11 @@ int	executor(t_shell *shell)
 	else
 		status = execute_multi_cmd(shell);
 	shell->exit_status = status;
+	if (status == FD_OPEN_EORROR)
+	{
+		shell->exit_status = 1;
+		return (CMD_SUCCESS);
+	}
 	return (status);
 }
 

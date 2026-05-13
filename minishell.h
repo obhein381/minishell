@@ -36,6 +36,7 @@ typedef struct s_token
 
 typedef struct s_command
 {
+	int					redir_error;
 	char				**argv;
 	pid_t				pid;
 	int					count;
@@ -94,6 +95,7 @@ typedef struct	s_shell
 # define NO_COMMAND 6
 # define EMPTY_ENVP 7
 # define READ_ERROR 8
+# define FD_OPEN_EORROR 20
 
 /* command path resolution status */
 # define CMD_SUCCESS 0

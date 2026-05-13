@@ -39,6 +39,7 @@ t_command	*new_command(int token_count)
 		return (NULL);
 	}
 	set_argv(new, token_count);
+	new->redir_error = 0;
 	new->fd_in = -1;
 	new->fd_out = -1;
 	new->count = 0;
