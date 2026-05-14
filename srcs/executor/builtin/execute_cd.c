@@ -62,10 +62,13 @@ int	execute_cd(t_command *command, t_shell *shell)
 {
 	char	*path;
 	int		home_index;
+	int		oldpwd_index;
 
 	if (command->argv[1] != NULL && command->argv[2] != NULL)
 		return (cd_arg_error());
-	if (command->argv[1] == NULL || ft_strncmp(command->argv[1], "--", 2) == 0)
+	if (command->argv[1] == NULL 
+		|| (ft_strncmp(command->argv[1], "--", 2) == 0 
+		&& ft_strlen(command->argv[1]) == 2))
 	{
 		home_index = find_envp_index(shell, "HOME");
 		if (home_index == -1 || shell->envp[home_index][4] != '=')
@@ -76,6 +79,20 @@ int	execute_cd(t_command *command, t_shell *shell)
 		path = &(shell->envp[home_index][5]);
 		if (path[0] == '\0')
 			return (0);
+	}
+	else if (ft_strncmp(command->argv[1], "-", 1) == 0 && ft_strlen(command->argv[1]) == 1)
+	{
+		oldpwd_index = find_envp_index(shell, "OLDPWD");
+			if (oldpwd_index == -1 || shell->envp[oldpwd_index][6] != '=')
+		{
+			write(2, "cd: OLDPWD not set\n", 19);
+			return (1);
+		}
+		path = &(shell->envp[oldpwd_index][7]);
+		if (path[0] == '\0')
+			return (0);
+		write(1, path, ft_strlen(path));
+		write(1, "\n", 1);
 	}
 	else
 		path = command->argv[1];
