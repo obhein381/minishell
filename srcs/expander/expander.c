@@ -12,53 +12,23 @@
 
 #include "minishell.h"
 
-int	is_only_var_token(char *str, int i)
+int	handling_tilde(t_shell *shell, char **value, int *i)
 {
-	int	j;
+	int		home_index;
+	char	*new_value;
 
-	if (i != 0)
-		return (0);
-	if (str[i] != '$')
-		return (0);
-	if (str[i + 1] == '?')
-		return (str[i + 2] == '\0');
-	if (ft_isalpha(str[i + 1]) != 1 && str[i + 1] != '_')
-		return (0);
-	j = i + 2;
-	while (str[j] != '\0')
-	{
-		if (ft_isalnum(str[j]) != 1 && str[j] != '_')
-			return (0);
-		j++;
-	}
-	return (1);
+	home_index = find_envp_index(shell, "HOME");
+	if (home_index == -1 || shell->envp[home_index][4] != '=')
+		return (CMD_SUCCESS);
+	new_value = ft_strdup(&(shell->envp[home_index][5]));
+	if (new_value == NULL)
+		return (MALLOC_ERROR);
+	free(*value);
+	*value = new_value;
+	*i = ft_strlen(*value);
+	return (CMD_SUCCESS);
 }
 
-int	is_valid_var_start(char	*str, int i)
-{
-		if (str[i] == '$' 
-			&& (str[i + 1] == '?'
-			|| ft_isalpha(str[i + 1])
-			|| str[i + 1] == '_'))
-		{
-			return (1);
-		}
-		return (0);
-}
-
-int	has_quote(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] != '\0')
-	{
-		if (str[i] == '\'' || str[i] == '\"')
-			return (1);
-		i++;
-	}
-	return (0);
-}
 
 int	handling_quote(t_shell *shell, t_token *token_arr)
 {
@@ -88,6 +58,15 @@ int	handling_quote(t_shell *shell, t_token *token_arr)
 			if (is_only_var_token(token_arr->value, i) == 1)
 				token_arr->word_split = 1;
 			state = handling_cash(shell, &(token_arr->value), &i);
+			if (state != CMD_SUCCESS)
+				return (state);
+			continue ;
+		}
+		if (token_arr->value[i] == '~'
+			&& i == 0
+			&& token_arr->value[i + 1] == '\0')
+		{
+			state = handling_tilde(shell, &(token_arr->value), &i);
 			if (state != CMD_SUCCESS)
 				return (state);
 			continue ;

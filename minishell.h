@@ -136,6 +136,8 @@ void		set_signal_child(void);
 void		set_signal_prompt(void);
 void		handler_signal_prompt(int sig);
 int			is_valid_var_start(char	*str, int i);
+int			is_only_var_token(char *str, int i);
+int			has_quote(char *str);
 int			expander(t_shell *shell, t_token **token_arr);
 int			handling_quote(t_shell *shell, t_token *token_arr);
 int			handling_dou_quote(t_shell *shell, char **word, int *i);

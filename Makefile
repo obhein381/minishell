@@ -11,7 +11,7 @@ SRCS = srcs/debug/debug_token.c srcs/debug/debug_commands.c \
 		srcs/expander/handling_sig_quote.c \
 		srcs/expander/handling_cash.c srcs/expander/handling_cash_opt.c \
 		srcs/expander/handling_dou_quote.c \
-		srcs/expander/expander.c \
+		srcs/expander/expander.c srcs/expander/expander_opt.c \
 		srcs/lexer/tokenization.c srcs/lexer/tokenization_opt.c \
 		srcs/parser/heredoc.c srcs/parser/heredoc_opt.c  \
 		srcs/parser/parser_redir.c srcs/parser/parser_pipe.c \
