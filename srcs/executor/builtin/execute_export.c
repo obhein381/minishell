@@ -41,16 +41,20 @@ static	int	input_key(t_shell *shell,char *entry,  int key_index)
 
 static int	handle_error(int key_index, int *i, char *argv, int *status)
 {
-	if (key_index == -1)
+	if (argv[0] == '-')
 	{
+		write(2, "export: bad option: ", 20);
+		write(2, argv, ft_strlen(argv));
+		write(2, "\n", 1);
+		*status = 2;
 		(*i)++;
 		return (1);
 	}
-	if (check_key(argv, key_index) == 1)
+	if (key_index == -1 || check_key(argv, key_index) == 1)
 	{
-		write(2, "export: not an identifier: ",  27);
+		write(2, "export: `", 9);
 		write(2, argv, ft_strlen(argv));
-		write(2, "\n", 1);
+		write(2, "': not a valid identifier\n", 26);
 		*status = 1;
 		(*i)++;
 		return (1);
@@ -77,6 +81,8 @@ int	execute_export(t_command *command, t_shell *shell)
 	while (argv[i] != NULL)
 	{
 		key_index = find_key_index(argv[i]);
+		if (key_index == -1)
+			key_index = ft_strlen(argv[i]);
 		if (handle_error(key_index, &i, argv[i], &status) == 1)
 			continue ;
 		entry = ft_strdup(argv[i]);
