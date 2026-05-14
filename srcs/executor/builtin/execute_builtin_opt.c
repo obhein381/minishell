@@ -53,7 +53,7 @@ int	call_cmd(t_command *command, t_shell *shell,  int type)
 	if (type == COMMAND_ECHO)
 		status = execute_echo(command);
 	if (type == COMMAND_ENV)
-		status = execute_env(shell);
+		status = execute_env(command, shell);
 	if (type == COMMAND_EXPORT)
 		status = execute_export(command, shell);
 	if (type == COMMAND_CD)

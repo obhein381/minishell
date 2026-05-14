@@ -53,12 +53,15 @@ int	execute_unset(t_command *command, t_shell *shell)
 	i = 1;
 	while (argv[i] != NULL)
 	{
+		if (argv[i][0] == '-' && argv[i][1] != '\0')
+		{
+			write(2, "unset: bad option: ", 19);
+			write(2, argv[i], ft_strlen(argv[i]));
+			write(2, "\n", 1);
+			return (2);
+		}
 		if (check_valid(argv[i]) == 1)
 		{
-			write(2, "unset: `", 8);
-			write(2, argv[i], ft_strlen(argv[i]));
-			write(2, "': not a valid identifier\n", 26);
-			exit_code = 1;
 			i++;
 			continue ;
 		}

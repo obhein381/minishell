@@ -71,7 +71,7 @@ int	execute_export(t_command *command, t_shell *shell)
 		return (CMD_SUCCESS);
 	argv = command->argv;
 	if (argv[1] == NULL)
-		return(execute_env(shell));
+		return(execute_env(command, shell));
 	status = CMD_SUCCESS;
 	i = 1;
 	while (argv[i] != NULL)

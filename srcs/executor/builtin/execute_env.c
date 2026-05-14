@@ -12,14 +12,10 @@
 
 #include "minishell.h"
 
-int	execute_env(t_shell *shell)
+void	print_env(char **envp)
 {
-	char	**envp;
-	int		i;
+	int	i;
 
-	envp = shell->envp;
-	if (envp == NULL)
-		return (EMPTY_ENVP);
 	i = 0;
 	while (envp[i] != NULL)
 	{
@@ -27,6 +23,32 @@ int	execute_env(t_shell *shell)
 		write(1, "\n", 1);
 		i++;
 	}
-	return (CMD_SUCCESS);
+}
+
+void	shift_argv_left(t_command *command)
+{
+	int	i;
+
+	i = 0;
+	while(command->argv[i + 1] != NULL)
+	{
+		command->argv[i] = command->argv[i + 1];
+		i++;
+	}
+	command->argv[i] = NULL;
+}
+
+int	execute_env(t_command *command, t_shell *shell)
+{
+
+	if (shell->envp == NULL)
+		return (EMPTY_ENVP);
+	if (command->argv[1] == NULL)
+	{
+		print_env(shell->envp);
+		return (CMD_SUCCESS);
+	}
+	shift_argv_left(command);
+	return (execute_external(command, shell->envp));
 }
 
