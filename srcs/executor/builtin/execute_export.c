@@ -51,7 +51,7 @@ static int	handle_error(int key_index, int *i, char *argv, int *status)
 		write(2, "export: not an identifier: ",  27);
 		write(2, argv, ft_strlen(argv));
 		write(2, "\n", 1);
-		*status = CMD_FAILURE;
+		*status = 1;
 		(*i)++;
 		return (1);
 	}
