@@ -28,7 +28,9 @@ void	print_env(char **envp)
 void	shift_argv_left(t_command *command)
 {
 	int	i;
+	char	*old;
 
+	old = command->argv[0];
 	i = 0;
 	while(command->argv[i + 1] != NULL)
 	{
@@ -36,6 +38,7 @@ void	shift_argv_left(t_command *command)
 		i++;
 	}
 	command->argv[i] = NULL;
+	free(old);
 }
 
 int	execute_env(t_command *command, t_shell *shell)
