@@ -163,6 +163,7 @@ int			parser_redir(t_shell *shell, t_command **commands, t_parser_state *state);
 int			parser_pipe(t_command **commands, t_command **cur, int token_count);
 int			parser_word(t_command **commands, t_parser_state state);
 int 		parser(t_shell *shell, t_token	*token_arr, t_command **commands);
+int			check_redir_syntax(t_token *token_arr);
 int			check_pipe_syntax(t_command *commands);
 void		execute_redir(t_command *command, int *fd, int *prev_read);
 int			executor(t_shell *shell);

@@ -84,6 +84,9 @@ int parser(t_shell *shell, t_token	*token_arr, t_command **commands)
 	check_error = parser_pipe(commands, &cur, state.token_count);
 	if (check_error != 0)
 		return (check_error);
+	check_error = check_redir_syntax(token_arr);
+	if (check_error != 0)
+		return (check_error);
 	while (state.cur != NULL)
 	{
 		check_error = parse_token(shell, commands, &cur, &state);

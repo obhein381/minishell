@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int			check_pipe_syntax(t_command *head)
+int	check_pipe_syntax(t_command *head)
 {
 	if (head != NULL
 		&& head->next == NULL
@@ -31,4 +31,25 @@ int			check_pipe_syntax(t_command *head)
 		head = head->next;
 	}
 	return (0);
+}
+
+int	check_redir_syntax(t_token *token_arr)
+{
+
+	while (token_arr != NULL)
+	{
+		if (token_arr->type == TOKEN_WORD || token_arr->type == TOKEN_PIPE)
+		{
+			token_arr = token_arr->next;
+			continue ;
+		}
+		else
+		{
+			token_arr = token_arr->next;
+			if (token_arr == NULL || token_arr->type != TOKEN_WORD)
+				return (REDIR_ERROR);
+		}
+	}
+	return (CMD_SUCCESS);
+
 }
