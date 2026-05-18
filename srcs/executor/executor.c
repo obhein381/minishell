@@ -51,6 +51,8 @@ int	execute_single_cmd(t_command *command, t_shell *shell)
 	int	builtin_type;
 	int	status;
 
+	if (command->argv == NULL || command->argv[0] == NULL)
+		return (CMD_SUCCESS);
 	if (is_empty_command(command))
 	{
 		ft_putstr_fd(": command not found\n", 2);
@@ -81,8 +83,6 @@ int	executor(t_shell *shell)
 	commands = shell->commands;
 	if (commands == NULL)
 		return (NO_COMMAND);
-	if (commands->argv == NULL || commands->argv[0] == NULL)
-		return (CMD_UNKNOWN_ERR);
 	if (commands->next == NULL)
 		status = execute_single_cmd(commands, shell);
 	else
